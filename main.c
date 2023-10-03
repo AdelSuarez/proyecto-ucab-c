@@ -4,8 +4,7 @@
   #include<windows.h>
 #endif  
 
-void clear_screen()
-{
+void clear_screen(){
   #ifdef _WIN32
     system("cls");
   #else
@@ -17,39 +16,28 @@ void clear_screen()
 char option;
 
 // Function
-void optUno()
-{
+void optUno(){
     clear_screen();
     printf("Opcion Uno\n");
 }
 
-void optDos()
-{
+void optDos(){
     clear_screen();
     printf("Opcion dos\n");
 }
 
 // Main
-int main()
-{
-    while (true)
-    {
+int main(){
+    while (true){
         printf("Introduce la opcion: ");
         scanf("%s", &option);
-        if (option == '1')
-        {
+        if (option == '1'){
             optUno();
-        }
-        else if (option == '2')
-        {
+        } else if (option == '2') {
             optDos();
-        }
-        else if (option == '0')
-        {
+        } else if (option == '0') {
             break;
-        }
-        else
-        {
+        } else {
             clear_screen();
             printf("La opcion no existe\n");
         }
