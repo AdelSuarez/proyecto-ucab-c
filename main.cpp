@@ -3,6 +3,9 @@ using namespace std;
 
 int main() {
 
-    cout << "hello world desde c++ con otra forma de compilar";
+    string name;
+    cout << "Cual es tu nombre: ";
+    cin >> name;
+    cout << "Entonces eres: " << name;
     return 0;
 }
