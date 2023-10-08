@@ -1,0 +1,41 @@
+    ** El Proyecto de Desarrollo tendrá una ponderación de 30%. Se dividirá en 02 (dos) etapas:
+    >> Primera entrega (10%): 
+
+*   El proyecto en su primera etapa permitirá evaluar los conocimientos de lenguaje c, manejo de menús, archivos y manejo 
+básico de listas dinámicas. Se debe incluir el ordenamiento de listas dinámicas.
+
+*   Navegación sobre todas las opciones del sistema con las validaciones necesarias para evitar fallos en la entrega final 
+(unicidad de campos clave, opciones inválidas en los menús, simplicidad y claridad en la navegación para el usuario final, 
+evitar ciclos infinitos en la navegación y otras).
+
+*   Manejo básico de listas simplemente enlazadas (crear, modificar, eliminar, buscar por campos claves y buscar sinónimos
+para ubicar campos clave, por ejemplo, “buscar todas las cédulas con nombre Pedro Pérez” para ubicar una cédula en 
+particular)
+
+*   Almacenamiento y recuperación de datos vía archivos secuenciales para mantener actualizada la información.
+
+Esta primera entrega pretende que el estudiante se familiarice con el Lenguaje C, sirva de repaso de los conceptos básicos 
+de programación y permita introducirlos en la programación de memoria dinámica.
+
+    >> Segunda entrega (20%):
+
+*   Completar un sistema que debe manejar listas dinámicas multinivel (agregar, modificar, buscar y eliminar) en cada una de
+sus entidades, así como la asociación entre ellas. Puede tener dos o tres niveles. No más. Por ejemplo: titulares de
+vehículos, vehículos y multas.
+
+*   Completar los reportes que requiera el cliente sobre los datos almacenados.
+
+*   Mantener la integridad, actualización de los datos en todo momento. 
+    
+*   La entrega final del proyecto deberá incluir Manejo Dinámico de Mutilistas y generación de reportes en base a la data
+almacenada (cumplir requerimientos exigidos).
+ 
+    El Proyecto podrá ser realizado por equipos de hasta tres (3) integrantes. Las evaluaciones de cada una de las etapas 
+serán realizadas por los distintos integrantes de los equipos, para que todos realicen alguna parte de las mismas.
+
+    Se utilizará Lenguaje C con opciones de C++ para manejo de entrada/salida (cin y cout en oposición a scanf y printf)  y 
+manejo dinámico (new y delete  en oposición a malloc(sizeof()) y free).
+
+    Se utilizará el programa Visual Studio Code para la edición de programas con Microsoft C++ como compilador 
+(los programas fuentes se generarán con extensión .cpp) o bien el entorno de desarrollo integrado Visual Studio (Versiones 
+2012 en adelante).
