@@ -25,11 +25,11 @@ using namespace std;
 //     Client *next;
 // };
 
-struct Seller {
-    struct Person seller;
-    int date_of_admission;
-    int commission;
-};
+// struct Seller {
+//     struct Person seller;
+//     int date_of_admission;
+//     int commission;
+// };
 
 
 // void addLClient(Client *&, long int, string , string , long int );
@@ -48,7 +48,7 @@ int main() {
         system("cls");
         cout << "Opciones: " << endl;
         cout << "1 - Insertar un cliente nuevo " << endl;
-        cout << "2 - Eliminar en la lista " << endl;
+        cout << "2 - Eliminar un cliente " << endl;
         cout << "3 - mostrar la lista " << endl;
         cout << "4 - Buscar en la lista " << endl;
         cout << "0 - Salir " << endl << endl;
@@ -77,13 +77,16 @@ int main() {
                 cin >> number; 
                 cin.ignore();
 
-                cout << name << " " << address << " " << number << " " << dni;
+                cout << name << " " << address << " " << number << " " << dni<< endl;
                 addLClient(LClient, dni, name,  address,number);
                 getch();
 
                 break;
             case 2:
+                cout << "Nombre del cliente: ";
+                getline(cin, name);
 
+                removeClient(LClient, name);
                 break;
 
             case 3:
@@ -91,7 +94,14 @@ int main() {
                 break;
 
             case 4:
+                system("cls");
                 
+                cout << "Modificar cliente" << endl << endl;
+                cout << "DNI del cliente: ";
+                cin >> dni;
+                cin.ignore();
+
+                editClient(LClient, dni);
                 break;  
             case 0:
                 active = false;

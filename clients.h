@@ -1,12 +1,8 @@
 #include <iostream>
 #include<string>
 #include<conio.h>
+#include "person.h"
 using namespace std;
-
-struct Person{
-    long int dni;
-    string name;
-};
 
 struct Client {
     Person client;
@@ -15,23 +11,25 @@ struct Client {
     Client *next;
 };
 
+
+// ! Se produce un error que genera un bucle infinito
 void addLClient(Client *&list, long int dni, string name, string address, long int number) {
-    Client *new_client = new Client(); // Create a new node to introduce into the list 
-    new_client->client.dni = dni;
-    new_client->client.name = name;
-    new_client->address = address; // Assign address to new_client
-    new_client->number = number; // Assign number to new_client
+    Client *newClient = new Client(); // Create a new node to introduce into the list 
+    newClient->client.dni = dni;
+    newClient->client.name = name;
+    newClient->address = address; // Assign address to new_client
+    newClient->number = number; // Assign number to new_client
 
     if (list == NULL || list->client.dni >= dni) { // Insert at the beginning or when list is NULL
-        new_client->next = list;
-        list = new_client;
+        newClient->next = list;
+        list = newClient;
     } else {
         Client *current = list;
         while (current->next != NULL && current->next->client.dni < dni) { // Traverse the list to find insertion point
             current = current->next;
         }
-        new_client->next = current->next; // Insert the node
-        current->next = new_client;
+        newClient->next = current->next; // Insert the node
+        current->next = newClient;
     }
     cout << "agregado con exito";
 
@@ -53,4 +51,69 @@ void showClients(Client *list)
     cout << endl;
     cout << "Presione cualqueir tecla para continuar";
     getch();
+}
+
+
+void removeClient(Client *&list, string name){
+    // TODO Modificar para que omita los espacios y pueda borrar segun lo que se escriba
+    if ( list != NULL) {
+        Client *auxRemove;
+        Client *previous = NULL;
+
+        auxRemove = list;
+
+        while((auxRemove != NULL) && (auxRemove->client.name != name)){
+            previous = auxRemove;
+            auxRemove = auxRemove->next;
+        }
+
+        if (auxRemove == NULL){
+            cout << "El elemento no ha sido encontrado";
+        } else if(previous == NULL) {
+            list = list->next;
+            delete auxRemove;
+        } else {
+            previous->next = auxRemove->next;
+            delete auxRemove;
+        }
+    }
+}
+
+
+void editClient(Client *&list, long int dni){
+    string newName, newAddress;
+    long int newNumber;
+
+
+    if ( list != NULL) {
+        Client *current = list;
+
+        // Buscar el nodo con el DNI proporcionado
+        while(current != NULL && current->client.dni != dni){
+            current = current->next;
+        }
+
+        // Si el nodo fue encontrado, modificar sus valores
+        if (current != NULL){
+
+            cout << " nuevo Nombre del cliente: ";
+            getline(cin, newName);
+
+            cout << "nueva Direccion del cliente: ";
+            getline(cin, newAddress);
+
+            cout << "nuevo Numero del cliente: ";
+            cin >> newNumber; 
+            cin.ignore();
+
+            current->client.name = newName;
+            current->address = newAddress;
+            current->number = newNumber;
+            cout << "Modificado con exito";
+        } else {
+            // Si el nodo no fue encontrado, imprimir un mensaje
+            cout << "El elemento no ha sido encontrado";
+            getch();
+        }
+    }
 }
