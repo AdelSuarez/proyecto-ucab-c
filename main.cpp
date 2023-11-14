@@ -1,9 +1,10 @@
 #include <iostream>
 #include<string>
-#include"clients.h"
+#include"src/clients.h"
 #include<conio.h>
 
 using namespace std;
+
 
 // struct Person{
 //     long int dni;
@@ -34,17 +35,18 @@ using namespace std;
 
 // void addLClient(Client *&, long int, string , string , long int );
 // void showClients(Client *);
+Client *LClient = NULL;
+long long int number, dni;
+string name, address;
+int opt;
+bool active = true;
 
 int main() {
 
-    Client *LClient = NULL;
-    long int dni, number;
-    string name, address;
-    int opt;
-    bool active = true;
 
     while (active){
-        fflush(stdin);
+            fflush(stdin);
+
         system("cls");
         cout << "Opciones: " << endl;
         cout << "1 - Insertar un cliente nuevo " << endl;
@@ -61,24 +63,28 @@ int main() {
         switch (opt){
             case 1:
                 system("cls");
+                fflush(stdin);
                 
                 cout << "Agregar nuevo cliente" << endl << endl;
                 cout << "DNI del cliente: ";
                 cin >> dni;
                 cin.ignore();
 
+                fflush(stdin);
                 cout << "Nombre del cliente: ";
                 getline(cin, name);
 
+                fflush(stdin);
                 cout << "Direccion del cliente: ";
                 getline(cin, address);
 
+                fflush(stdin);
                 cout << "Numero del cliente: ";
                 cin >> number; 
                 cin.ignore();
 
                 cout << name << " " << address << " " << number << " " << dni<< endl;
-                addLClient(LClient, dni, name,  address,number);
+                addLClient(LClient, dni, name,  address, number);
                 getch();
 
                 break;

@@ -7,18 +7,20 @@ using namespace std;
 struct Client {
     Person client;
     string address;
-    long int number;
+    long long int number;
     Client *next;
 };
 
 
 // ! Se produce un error que genera un bucle infinito
-void addLClient(Client *&list, long int dni, string name, string address, long int number) {
+void addLClient(Client *&list, long long int dni, string name, string address, long long int number) {
     Client *newClient = new Client(); // Create a new node to introduce into the list 
     newClient->client.dni = dni;
     newClient->client.name = name;
     newClient->address = address; // Assign address to new_client
     newClient->number = number; // Assign number to new_client
+    newClient->next = NULL; // Initialize next pointer to NULL
+
 
     if (list == NULL || list->client.dni >= dni) { // Insert at the beginning or when list is NULL
         newClient->next = list;
@@ -34,6 +36,29 @@ void addLClient(Client *&list, long int dni, string name, string address, long i
     cout << "agregado con exito";
 
 }
+
+// void addLClient(Client *&list, long int dni, string name, string address, long int number) {
+//     Client *newClient = new Client(); // Create a new node to introduce into the list 
+//     newClient->client.dni = dni;
+//     newClient->client.name = name;
+//     newClient->address = address; // Assign address to new_client
+//     newClient->number = number; // Assign number to new_client
+//     newClient->next = NULL; // Initialize next pointer to NULL
+
+//     if (list == NULL || list->client.dni >= dni) { // Insert at the beginning or when list is NULL
+//         newClient->next = list;
+//         list = newClient;
+//     } else {
+//         Client *current = list;
+//         while (current->next != NULL && current->next->client.dni < dni) { // Traverse the list to find insertion point
+//             current = current->next;
+//         }
+//         newClient->next = current->next; // Insert the node
+//         current->next = newClient;
+//     }
+//     cout << "agregado con exito";
+// }
+
 
 void showClients(Client *list)
 {
@@ -80,7 +105,7 @@ void removeClient(Client *&list, string name){
 }
 
 
-void editClient(Client *&list, long int dni){
+void editClient(Client *&list, long long int dni){
     string newName, newAddress;
     long int newNumber;
 
