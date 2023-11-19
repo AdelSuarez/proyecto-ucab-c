@@ -12,7 +12,6 @@ struct Client {
 };
 
 
-// ! Se produce un error que genera un bucle infinito
 void addLClient(Client *&list, long long int dni, string name, string address, long long int number) {
     Client *newClient = new Client(); // Create a new node to introduce into the list 
     newClient->client.dni = dni;
@@ -37,31 +36,7 @@ void addLClient(Client *&list, long long int dni, string name, string address, l
 
 }
 
-// void addLClient(Client *&list, long int dni, string name, string address, long int number) {
-//     Client *newClient = new Client(); // Create a new node to introduce into the list 
-//     newClient->client.dni = dni;
-//     newClient->client.name = name;
-//     newClient->address = address; // Assign address to new_client
-//     newClient->number = number; // Assign number to new_client
-//     newClient->next = NULL; // Initialize next pointer to NULL
-
-//     if (list == NULL || list->client.dni >= dni) { // Insert at the beginning or when list is NULL
-//         newClient->next = list;
-//         list = newClient;
-//     } else {
-//         Client *current = list;
-//         while (current->next != NULL && current->next->client.dni < dni) { // Traverse the list to find insertion point
-//             current = current->next;
-//         }
-//         newClient->next = current->next; // Insert the node
-//         current->next = newClient;
-//     }
-//     cout << "agregado con exito";
-// }
-
-
-void showClients(Client *list)
-{
+void showClients(Client *list) {
     system("cls");
     cout << "Lista" << endl;
 
@@ -74,12 +49,12 @@ void showClients(Client *list)
         current = current->next;
     }
     cout << endl;
-    cout << "Presione cualqueir tecla para continuar";
+    cout << "Presione cualquier tecla para continuar";
     getch();
 }
 
 
-void removeClient(Client *&list, string name){
+void removeClient(Client *list, string name){
     // TODO Modificar para que omita los espacios y pueda borrar segun lo que se escriba
     if ( list != NULL) {
         Client *auxRemove;
@@ -141,4 +116,25 @@ void editClient(Client *&list, long long int dni){
             getch();
         }
     }
+}
+
+
+void searchClient(Client* list, long int dni, string name){
+    Client* current = list;
+    bool found = false;
+
+    while(current != NULL && !found) {
+        if(current->client.dni == dni || current->client.name == name) {
+            cout << "Nombre: " << current->client.name << ", DNI: " << current->client.dni << endl;
+            found = true;
+        }
+        current = current->next;
+    }
+
+    if(!found) {
+        cout << "Cliente no encontrado." << endl;
+    }
+    cout << endl;
+    cout << "Presione cualquier tecla para continuar";
+    getch();
 }

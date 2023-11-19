@@ -1,58 +1,110 @@
 #include <iostream>
 #include<string>
-#include"src/clients.h"
+#include"model/clients.h"
+#include"model/articles.h"
+
 #include<conio.h>
 
 using namespace std;
 
-
-// struct Person{
-//     long int dni;
-//     string name;
-// };
-
-// struct Article {
-//     string code;
-//     string name;
-//     float price;
-//     int stock;
-
-// };
-
-// struct Client {
-//     Person client;
-//     string address;
-//     long int number;
-//     Client *next;
-// };
-
-// struct Seller {
-//     struct Person seller;
-//     int date_of_admission;
-//     int commission;
-// };
-
-
-// void addLClient(Client *&, long int, string , string , long int );
-// void showClients(Client *);
 Client *LClient = NULL;
+Article *LArticles = NULL;
+
+
 long long int number, dni;
-string name, address;
-int opt;
-bool active = true;
+long int key, stock;
+float price;
+string name, address, code;
+
+
+void menuClient();
+
 
 int main() {
 
-
-    while (active){
-            fflush(stdin);
+    int opt;
+    do{
+        fflush(stdin);
 
         system("cls");
-        cout << "Opciones: " << endl;
-        cout << "1 - Insertar un cliente nuevo " << endl;
-        cout << "2 - Eliminar un cliente " << endl;
-        cout << "3 - mostrar la lista " << endl;
-        cout << "4 - Buscar en la lista " << endl;
+        cout << "\t-TIENDA DE ARTICULOS-" << endl;
+        cout << "1 - Ingresar nuevo articulo " << endl;
+        cout << "2 - Editar articulo " << endl;
+        cout << "3 - Eliminar articulo" << endl;
+        cout << "4 - Busqueda de Articulos" << endl;
+        cout << "5 - Ingreso de Stock al Inventario" << endl;
+        cout << "6 - Ver Articulos " << endl << endl;
+        
+        cout << "7 - Menu Gestion de Facturas " << endl;
+        cout << "8 - Menu Gestion de Clientes " << endl;
+        cout << "9 - Menu Gestion de Descuentos " << endl;
+        cout << "10 - Menu Gestion de Bonos " << endl;
+        cout << "11 - Menu Gestion de Comisiones " << endl;
+        cout << "12 - Menu Gestion de Vendedores " << endl;
+
+        cout << "0 - Salir " << endl << endl;
+
+        cout << "Introduce la opcion >> ";
+        cin >> opt;
+        cin.ignore();
+
+        
+        switch (opt){
+            case 1:
+                system("cls");
+                // add articule
+                cout << "\tINGRESAR NUEVO ARTICULO-" << endl;
+                cout << "Introduce el codigo: ";
+                getline(cin, code);
+                cout << "Introduce el nombre: ";
+                getline(cin, name);
+                cout << "Introduce el precio: ";
+                cin >> price;
+
+                cout << "Introduce el stock: ";
+                cin >> stock;
+                key++;
+                addArticle(LArticles, key, code, name, price, stock);
+                break;
+            case 2:
+                break; 
+
+            case 3:
+                cout << "Introduce el nombre: ";
+                getline(cin, name);
+                removeArticles(LArticles, name);
+                break; 
+                
+            case 6:
+                showArticles(LArticles);
+                break;
+
+            case 8:
+                // MENU CLIENT
+                menuClient();
+                break;
+            case 0:
+                break;
+            default:
+                cout << "Opcion no valida" << endl;
+                break;
+            }
+    }while (opt != 0);
+    return 0;
+}
+
+void menuClient(){
+    int opt;
+    do{
+        fflush(stdin);
+
+        system("cls");
+        cout << "\t-GESTION DE CLIENTES-" << endl;
+        cout << "1 - Agreagar un cliente nuevo " << endl;
+        cout << "2 - Editar cliente " << endl;
+        cout << "3 - Buscar cliente " << endl;
+        cout << "4 - Eliminar cliente " << endl;
+        cout << "5 - Mostar lista de clientes" << endl;
         cout << "0 - Salir " << endl << endl;
 
         cout << "Introduce la opcion >> ";
@@ -65,7 +117,7 @@ int main() {
                 system("cls");
                 fflush(stdin);
                 
-                cout << "Agregar nuevo cliente" << endl << endl;
+                cout << "\t-Agregar nuevo cliente-" << endl << endl;
                 cout << "DNI del cliente: ";
                 cin >> dni;
                 cin.ignore();
@@ -79,7 +131,7 @@ int main() {
                 getline(cin, address);
 
                 fflush(stdin);
-                cout << "Numero del cliente: ";
+                cout << "Numero telefonico del cliente: ";
                 cin >> number; 
                 cin.ignore();
 
@@ -89,125 +141,53 @@ int main() {
 
                 break;
             case 2:
+                system("cls");
+                cout << "\t-Editar cliente-" << endl;
+                cout << "DNI del cliente: ";
+                cin >> dni;
+                cin.ignore();
+
+                editClient(LClient, dni);
+                break; 
+
+            case 3:
+                system("cls");
+                cout << "\t-Buscar cliente-" << endl;
+
+                fflush(stdin);
+                cout << "DNI del cliente: ";
+                cin >> dni;
+
+                
+                fflush(stdin);
+                cout << "nombre del cliente: ";
+                getline(cin, name);
+
+                // cout << "Direccion del cliente: ";
+                // getline(cin, address);
+
+
+                searchClient(LClient, dni, name);
+                break; 
+                
+
+            case 4:
+                cout << "\t-Eliminar cliente" << endl;
                 cout << "Nombre del cliente: ";
                 getline(cin, name);
 
                 removeClient(LClient, name);
                 break;
 
-            case 3:
+            case 5:
                 showClients(LClient);
                 break;
-
-            case 4:
-                system("cls");
-                
-                cout << "Modificar cliente" << endl << endl;
-                cout << "DNI del cliente: ";
-                cin >> dni;
-                cin.ignore();
-
-                editClient(LClient, dni);
-                break;  
             case 0:
-                active = false;
                 break;
             default:
                 cout << "Opcion no valida" << endl;
                 break;
             }
-    }
-    return 0;
+    }while (opt != 0);
+
 }
-
-// void addLCustomer(Customer *&list, long int dni, string name, string address, long int number) {
-
-//     Customer *new_customer = new Customer(); // creada un nuevo nodo para introducirlo en la lista 
-//     new_customer->customer.dni= dni;
-//     new_customer->customer.name = name;
-//     new_customer->address;
-//     new_customer->number; // introduce el dato en le nuevo dato ya creado
-
-//     Customer *aux1 = list;
-//     Customer *aux2;
-
-//     while((aux1 != NULL) && (aux1->customer.dni < dni)){
-//         aux2 = aux1;
-//         aux1 = aux1->next;
-
-//     }
-
-//     if (list == aux1){
-//         list = new_customer;
-
-//     } else {
-//         aux2->next = new_customer;
-//     }
-
-
-//     new_customer->next = aux1;
-//     cout << "agregado con exito";
-// }
-
-// void addLCustomer(Customer *&list, long int dni, string name, string address, long int number) {
-//     Customer *new_customer = new Customer(); // Create a new node to introduce into the list 
-//     new_customer->customer.dni = dni;
-//     new_customer->address = address;
-//     new_customer->number = number;
-//     new_customer->customer.name = name; // Introduce the data into the new node
-
-//     if (list == NULL || list->customer.dni >= dni) { // Insert at the beginning or when list is NULL
-//         new_customer->next = list;
-//         list = new_customer;
-//     } else {
-//         Customer *current = list;
-//         while (current->next != NULL && current->next->customer.dni < dni) { // Traverse the list to find insertion point
-//             current = current->next;
-//         }
-//         new_customer->next = current->next; // Insert the node
-//         current->next = new_customer;
-//     }
-//     cout << "agregado con exito";
-//     getch();
-
-// }
-
-// void addLClient(Client *&list, long int dni, string name, string address, long int number) {
-//     Client *new_client = new Client(); // Create a new node to introduce into the list 
-//     new_client->client.dni = dni;
-//     new_client->client.name = name;
-//     new_client->address = address; // Assign address to new_client
-//     new_client->number = number; // Assign number to new_client
-
-//     if (list == NULL || list->client.dni >= dni) { // Insert at the beginning or when list is NULL
-//         new_client->next = list;
-//         list = new_client;
-//     } else {
-//         Client *current = list;
-//         while (current->next != NULL && current->next->client.dni < dni) { // Traverse the list to find insertion point
-//             current = current->next;
-//         }
-//         new_client->next = current->next; // Insert the node
-//         current->next = new_client;
-//     }
-//     cout << "agregado con exito";
-
-// }
-
-// void showClients(Client *list)
-// {
-//     system("cls");
-//     cout << "Lista" << endl;
-
-
-//     Client *current = new Client();
-//     current = list;
-
-//     while(current != NULL){
-//         cout << current->client.name << " | " << current->client.dni << " | " << current->address << " | " << current->number <<endl;
-//         current = current->next;
-//     }
-//     cout << endl;
-//     cout << "Presione cualqueir tecla para continuar";
-//     getch();
-// }

@@ -12,4 +12,5 @@ struct Seller {
     Person seller;
     AdmissionDay admissionDay;
     int commission;
+    Seller *next;
 };
