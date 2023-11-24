@@ -2,6 +2,7 @@
 #include<string>
 #include"model/clients.h"
 #include"model/articles.h"
+#include"file.h"
 
 #include<conio.h>
 
@@ -15,14 +16,14 @@ long long int number, dni;
 long int key, stock;
 float price;
 string name, address, code;
+int opt;
 
 
 void menuClient();
 
 
 int main() {
-
-    int opt;
+    createFile();
     do{
         fflush(stdin);
 
@@ -51,8 +52,8 @@ int main() {
         
         switch (opt){
             case 1:
+                // add article
                 system("cls");
-                // add articule
                 cout << "\tINGRESAR NUEVO ARTICULO-" << endl;
                 cout << "Introduce el codigo: ";
                 getline(cin, code);
@@ -64,18 +65,37 @@ int main() {
                 cout << "Introduce el stock: ";
                 cin >> stock;
                 key++;
-                addArticle(LArticles, key, code, name, price, stock);
+                writeFile(code, name, price, stock);
+                addArticle(LArticles, creatArticle( key, code, name, price, stock), false);
                 break;
             case 2:
+                system("cls");
+
+                // edit article
+                cout << "\tEDITAR ARTICULO-" << endl;
+
+                cout << "Introduce el nombre: ";
+                getline(cin, name);
+                editArticle(LArticles, name);
                 break; 
 
             case 3:
-                cout << "Introduce el nombre: ";
-                getline(cin, name);
-                removeArticles(LArticles, name);
+                system("cls");
+                cout << "\t-ELIMINAR ARTICULO- "<< endl;
+                
+                if (LArticles != NULL) {
+                    cout << "Introduce el nombre: ";
+                    getline(cin, name);
+                    removeArticles(LArticles, name);
+
+                } else {
+                    cout << "No existen articulos. Presione un boton para continuar";
+                    getch();
+                }
                 break; 
                 
             case 6:
+                readFile(LArticles);
                 showArticles(LArticles);
                 break;
 

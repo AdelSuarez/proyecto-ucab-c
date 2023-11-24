@@ -11,7 +11,6 @@ struct Client {
     Client *next;
 };
 
-
 void addLClient(Client *&list, long long int dni, string name, string address, long long int number) {
     Client *newClient = new Client(); // Create a new node to introduce into the list 
     newClient->client.dni = dni;
@@ -96,7 +95,7 @@ void editClient(Client *&list, long long int dni){
         // Si el nodo fue encontrado, modificar sus valores
         if (current != NULL){
 
-            cout << " nuevo Nombre del cliente: ";
+            cout << "nuevo Nombre del cliente: ";
             getline(cin, newName);
 
             cout << "nueva Direccion del cliente: ";

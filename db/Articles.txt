@@ -1,0 +1,13 @@
+ARTICULOS
+B002
+pelota
+2
+10
+B0004
+bolsa
+1
+25
+A0001
+bolso
+15
+14
