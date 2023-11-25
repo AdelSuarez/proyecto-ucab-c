@@ -11,7 +11,7 @@ using namespace std;
 Client *LClient = NULL;
 Article *LArticles = NULL;
 
-
+bool loadingArticles = true;
 long long int number, dni;
 long int key, stock;
 float price;
@@ -23,11 +23,19 @@ void menuClient();
 
 
 int main() {
+    readFile(LArticles, key);
     createFile();
+    
     do{
         fflush(stdin);
 
         system("cls");
+        if (loadingArticles){
+            cout << "Se han cargado los articulos -> " << key <<endl << endl;
+            loadingArticles = false;
+        }
+        
+
         cout << "\t-TIENDA DE ARTICULOS-" << endl;
         cout << "1 - Ingresar nuevo articulo " << endl;
         cout << "2 - Editar articulo " << endl;
@@ -43,7 +51,8 @@ int main() {
         cout << "11 - Menu Gestion de Comisiones " << endl;
         cout << "12 - Menu Gestion de Vendedores " << endl;
 
-        cout << "0 - Salir " << endl << endl;
+        cout << "0 - Salir " << endl;
+        cout << "V0.0.1.5 " << endl << endl;
 
         cout << "Introduce la opcion >> ";
         cin >> opt;
@@ -54,30 +63,44 @@ int main() {
             case 1:
                 // add article
                 system("cls");
-                cout << "\tINGRESAR NUEVO ARTICULO-" << endl;
-                cout << "Introduce el codigo: ";
+                cout << "\t-INGRESAR NUEVO ARTICULO-" << endl;
+                cout << "Introduce el codigo >> ";
                 getline(cin, code);
-                cout << "Introduce el nombre: ";
+                cout << "Introduce el nombre >> ";
                 getline(cin, name);
-                cout << "Introduce el precio: ";
+                cout << "Introduce el precio >> ";
                 cin >> price;
 
-                cout << "Introduce el stock: ";
+                cout << "Introduce el stock >> ";
                 cin >> stock;
                 key++;
-                writeFile(code, name, price, stock);
+
+                writeFile(key, code, name, price, stock);
                 addArticle(LArticles, creatArticle( key, code, name, price, stock), false);
                 break;
             case 2:
                 system("cls");
 
                 // edit article
-                cout << "\tEDITAR ARTICULO-" << endl;
+                if (LArticles != NULL){
+                    cout << "\tEDITAR ARTICULO-" << endl;
+                    cout << "Introduce el nombre: ";
+                    getline(cin, name);
 
-                cout << "Introduce el nombre: ";
-                getline(cin, name);
-                editArticle(LArticles, name);
-                break; 
+
+                    if(search(LArticles, name)){
+                        editArticle(LArticles, name);
+                        editFile(LArticles);
+                    } else{
+                        cout << "\tArticulo no encontrado"<< endl;
+                        cout << "Presione un boton para continuar.";
+                        getch();
+                    }
+                } else {
+                    cout << "No existen articulos. Presione un boton para continuar";
+                    getch(); 
+                }
+                break;
 
             case 3:
                 system("cls");
@@ -87,6 +110,9 @@ int main() {
                     cout << "Introduce el nombre: ";
                     getline(cin, name);
                     removeArticles(LArticles, name);
+                    showArticles(LArticles);
+
+
 
                 } else {
                     cout << "No existen articulos. Presione un boton para continuar";
@@ -95,7 +121,6 @@ int main() {
                 break; 
                 
             case 6:
-                readFile(LArticles);
                 showArticles(LArticles);
                 break;
 

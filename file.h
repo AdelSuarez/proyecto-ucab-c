@@ -2,7 +2,7 @@
 #include<string>
 #include<conio.h>
 #include<fstream>
-
+#include <iomanip>
 using namespace std;
 
 const string DB = "db/Articles.txt" ;
@@ -27,7 +27,7 @@ void createFile(){
 
 }
 
-void writeFile(string code, string name, int price, int stock){
+void writeFile(long int key, string code, string name, float price, int stock){
     ofstream file;
     file.open(DB.c_str(), ios::app);
 
@@ -36,7 +36,7 @@ void writeFile(string code, string name, int price, int stock){
     } else {
         file << code << endl;
         file << name << endl;
-        file << price << endl;
+        file << std::fixed << std::setprecision(2) << price << endl;  // Aquí es donde se escribe el precio con precisión decimal
         file << stock << endl;
     }
     file.close();   
@@ -44,9 +44,7 @@ void writeFile(string code, string name, int price, int stock){
 
 
 
-
-void readFile(Article *&list){
-    //TODO Corregir el error de que guarda dos veces los datos en la la lista cuando se llama por segunda vez la funcion 
+void readFile(Article *&list,long int &currentKey){
 
     ifstream file;
     
@@ -54,11 +52,13 @@ void readFile(Article *&list){
     long int key = 0, stock;
     int count = 0;
     float price;
+    list = NULL;
 
     file.open(DB.c_str(), ios:: in);
 
     if (file.fail()){
         cout << "No se puede abrir el archivo";
+        return;
     }
 
     while(!file.eof()){
@@ -66,67 +66,43 @@ void readFile(Article *&list){
         if (text!="ARTICULOS"){
             if (count == 0){
                 code = text;
-                count++;
             } else if (count == 1) {
                 name = text;
-                count++;
             } else if (count == 2) {
                 price = stof(text);
-                count++;
             } else if (count == 3){
                 stock = stoi(text);
-                count = 0;
+                count = -1;
                 key++;
                 addArticle(list, creatArticle(key, code, name, price, stock), true);
             }
-            
+            count++;
+
         } 
+    }
+    currentKey = key;
+    file.close();
+}
+
+void editFile(Article *&list){
+    ofstream file;
+    file.open(DB.c_str(), ios::out);  // Abre el archivo en modo de escritura, esto borrará el contenido existente
+
+    if (file.fail()){
+        cout << "No se puede abrir el archivo";
+        return;
+    }
+
+    Article* current = list;
+    while(current != NULL){
+        file << "ARTICULOS" << endl;
+        file << current->code << endl;
+        file << current->name << endl;
+        file << std::fixed << std::setprecision(2) << current->price << endl;
+        file << current->stock << endl;
+        current = current->next;
     }
 
     file.close();
 }
 
-// void readFile(Article *&list){
-//     long int key = 0;
-//     ifstream file(DB.c_str());
-
-//     if (file.fail()){
-//         cout << "No se puede abrir el archivo";
-//         return;
-//     }
-
-//     if (file.peek() == ifstream::traits_type::eof()){
-//         // El archivo está vacío
-//         return;
-//     }
-
-//     string text, code, name;
-//     float price;
-//     long int stock;
-//     int count = 0;
-
-//     while(getline(file, text)){
-//         if (text != "ARTICULOS"){
-//             switch (count) {
-//                 case 0:
-//                     code = text;
-//                     break;
-//                 case 1:
-//                     name = text;
-//                     break;
-//                 case 2:
-//                     price = stof(text);
-//                     break;
-//                 case 3:
-//                     stock = stoi(text);
-//                     key++;
-//                     addArticle(list, creatArticle(key, code, name, price, stock), true);
-//                     count = -1; // Se restablecerá a 0 en la siguiente línea
-//                     break;
-//             }
-//             count++;
-//         }
-//     }
-
-//     file.close();
-// }

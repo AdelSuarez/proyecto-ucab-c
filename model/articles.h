@@ -1,8 +1,13 @@
 #include <iostream>
 #include<string>
+#include <iomanip>
 #include<conio.h>
+#include"../settings/style.h"
+
+
 using namespace std;
 
+// STRUCT OF ARTICLE
 struct Article {
     long int key;
     string code;
@@ -13,100 +18,7 @@ struct Article {
 };
 
 
-Article* creatArticle(long int key, string code, string name, float price, long int stock){
-    Article *article = new Article();
-    article->key = key;
-    article->code = code;
-    article->name = name;
-    article->price = price;
-    article->stock = stock;
-    article->next = NULL;
-    return article;
-}
-
-
-void addArticle(Article *&list, Article *article, bool isFile){
-
-    if (list == NULL){
-        list = article;
-    } else {
-        Article *current = list;
-        while(current->next != NULL){
-            current = current->next;
-        }
-        current->next = article;
-
-    }
-    if (!isFile){
-        cout << "Agregado con exito"<< endl;
-        cout << "Presiona cualquier boton para continuar"<< endl;
-
-        getch();
-        // TODO terminar de desarrollar 
-    }
-    
-}
-
-// TODO esta funcion no hace lo que quiero
-// Article* currentArticle(Article *&list, string name ){
-//     Article *current = list;
-
-//     // Buscar el nodo con el DNI proporcionado
-//     while(current != NULL && current->name != name){
-//         current = current->next;
-//     }
-//     return current;
-// }
-
-// TODO terminar la funcion
-bool search(Article *, string);
-void editArticle(Article *&list, string name ){
-    int option;
-    string newName;
-    if (list != NULL){
-        if (search(list, name)) {
-            Article *current = list;
-            // Buscar el nodo con el DNI proporcionado
-            while(current != NULL && current->name != name){
-                current = current->next;
-            }
-            do {
-
-                cout << "\tOpciones a editar " << current->name << endl;
-                cout << "Clave " << current->key << endl;
-                cout << "1- Nombre: " << current->name << endl;
-                cout << "2- Codigo: " << current->code << endl;
-                cout << "3- Precio: " << current->price << endl;
-                cout << "4- Stock: " << current->stock << endl;
-                cout << "0- Salir " << endl;
-                cout << "Introduce la opcion >> ";
-                cin >> option;
-
-                switch (option)
-                {
-                case 1:
-                    cout << "Editar nombre" << endl;
-                    cout << "Nuevo nombre: ";
-                    getline(cin, newName);
-                    current->name = newName;
-                    break;
-                
-                default:
-                    cout << "La opcion no existe";
-                    break;
-                }
-            } while(option !=0);
-
-        } else {
-            cout << "no encontrado";
-        }
-        getch();
-    }
-}
-
-
-
-
+// SEARCH ARTICLE ------------------------
 bool search(Article *list , string name){
     Article *current = list;
     bool found = false;
@@ -120,38 +32,148 @@ bool search(Article *list , string name){
     return found;
 }
 
+// CREATE ARTICLE -----------------------------------------------
+Article* creatArticle(long int key, string code, string name, float price, long int stock){
+    Article *article = new Article();
+    article->key = key;
+    article->code = code;
+    article->name = name;
+    article->price = price;
+    article->stock = stock;
+    article->next = NULL;
+    return article;
+}
+
+// ADD ARTICLE ------------------------------------------------
+void addArticle(Article *&list, Article *article, bool isFile){
+
+    if (list == NULL){
+        list = article;
+
+    } else {
+        Article *current = list;
+        while(current->next != NULL){
+            current = current->next;
+        }
+        current->next = article;
+
+    }
+    if (!isFile){
+        cout << "\tAgregado con exito"<< endl << endl;
+        cout << "Presiona cualquier boton para continuar ";
+
+        getch();
+    }
+    
+}
 
 
+// EDIT ARTICLE -------------------------------
+void editArticle(Article *&list, string name ){
+    bool isName = false, isCode = false, isPrice = false, isStock = false;
+    int option;
+    long int newStock;
+    float newPrice;
+    string newName, newCode;
 
+    Article *current = list;
+    while(current != NULL && current->name != name){
+        current = current->next;
+    }
+    do {
+        system("cls");
+        fflush(stdin);
+        cout << "\tOPCIONES"<< endl;
+        cout << "Clave " << current->key << "    | ARTICULO"<< endl;
+        cout << left << setw(1) << "1-" << setw(9) << "Nombre"<< "| " << setw(12) << current->name << (isName ? GRN "*" NC: "") << endl;
+        cout << left << setw(1) << "2-" << setw(9) << "Codigo"<< "| " << setw(12) << current->code << (isCode ? GRN "*" NC: "") << endl;
+        cout << left << setw(1) << "3-" << setw(9) << "Precio"<< "| " << setw(12) << current->price << (isPrice ? GRN "*" NC: "") << endl;
+        cout << left << setw(1) << "4-" << setw(9) << "Stock"<< "| " << setw(12) << current->stock << (isStock ? GRN "*" NC: "") << endl;
+        cout << "0- Salir" << endl;
+        cout << "Introduce la opcion >> ";
+        cin >> option;
+        cin.ignore();
+        cout << endl;
 
+        switch (option){
+        case 1:
+            cout << "+\tEditar nombre" << endl;
+            cout << "| Nuevo nombre: ";
+            getline(cin, newName);
+            current->name = newName;
+            cout << "|" <<endl;
+            cout << "+ Nombre editado con exito!";
+            isName = true;
 
+            getch();
+            break;
 
+        case 2:
+            cout << "+\tEditar codigo" << endl;
+            cout << "| Nuevo codigo >> ";
+            getline(cin, newCode);
+            current->code = newCode;
+            cout << "|" <<endl;
 
+            cout << "+ Codigo editado con exito!";
+            isCode = true;
+            getch();
+            break;
 
+        case 3:
+            cout << "+\tEditar price" << endl;
+            cout << "| Nuevo precio >> ";
+            cin >> newPrice;
+            current->price = newPrice;
+            cout << "|" <<endl;
+            cout << "+ Precio editado con exito!";
+            isPrice = true;
+            getch();
+            break;
 
+        case 4:
+            cout << "+\tEditar stock" << endl;
+            cout << "| Nuevo stock >> ";
+            cin >> newStock;
+            current->stock = newStock;
+            cout << "|" <<endl;
+            cout << "+ Stock editado con exito!";
+            isStock = true;
+            
+            getch();
+            break;
 
+        case 0:
+            break;
+        default:
+            cout << "La opcion no existe";
+            getch();
+            break;
+        }
+    } while(option !=0);
+}
 
-
-
+// SHOW ARTICLES -------------------
 void showArticles(Article *&list) {
     system("cls");
-
 
     Article *current = new Article();
     current = list;
 
     if (list != NULL) {
-        cout << "\t-LISTA ARTICULOS-" << endl;
-        if (current->key != 0){
+        cout << "\t\t-LISTA ARTICULOS-" << endl;
+        cout << left << setw(10) << "KEY" << setw(15) << "CODE" << setw(20) << "NOMBRE" << setw(10) << "PRECIO" << setw(10) << "STOCK" << endl;
 
             while(current != NULL){
-                cout << current->key << " | " << current->code << " | " << current->name << " | " << current->price << " | " << current->stock <<endl;
+                cout << left << setw(10) << current->key << setw(12) << current->code << setw(23) << current->name << setw(10) << current->price << setw(11) << current->stock << endl;
                 current = current->next;
+            //     cout << "  " << current->key << "  | " << current->code << "  | " << current->name << " | " << current->price << " | " << current->stock <<endl;
+            //     current = current->next;
             } 
-        } else {
-            cout << "La lista de articulos esta vacia";
-            list = NULL;
-        }
+        // } else {
+        //     cout << "La lista de articulos esta vacia";
+        //     // list = NULL;
+        // }
 
     } else {
         cout << "La lista de articulos esta vacia";
@@ -161,101 +183,57 @@ void showArticles(Article *&list) {
     getch();
 }
 
-void removeStock(Article *&, string);
+
+
+
 void remove(Article *&, string);
 bool searchArticle(Article *, string);
+
+
 void removeArticles(Article *list, string name){
-    int opt;
-    bool found = searchArticle(list, name);
+    string opt;
 
-    if(found){
+    if(search(list, name)){
         
-        cout << "1. Eliminar articulo "<< endl;
-        cout << "2. Eliminar de stock articulo "<< endl;
-        cout << "Introduce la opcion: ";
-        cin >> opt;
-
-        switch(opt) {
-            case 1:
-                system("cls");
-                cout << "Eliminar articulo "<< endl;
-                remove(list, name);
-                break;
-
-            case 2:
-                system("cls");
-                cout << "Eliminar de stock articulo "<< endl;
-                removeStock(list, name);
-                break;
-
-            default:
-                cout << "La opcion no existe"<< endl;
-                break;
+        cout << "Articulo: "<< name << endl;
+        cout << "Desea eliminar el articulo (s/n) >> ";
+        getline(cin, opt);
+        if ((opt == "s") ||(opt == "S")){
+            remove(list, name);
+        } else {
+            return;
         }
-        
-        // cout << "se puede editar" << endl;
 
     } else {
-        cout << "No se puede editar " << endl;
+        cout << "\t El articulo no existe!" << endl;
     }
     getch();
 
 }
 
-
-bool searchArticle(Article *list , string name){
+void remove(Article *&list, string name) {
     Article *current = list;
-    bool found = false;
+    Article *previous = NULL;
 
-    while(current != NULL && !found) {
-        if(current->name == name) {
-            cout << " Stock disponible: " << current->stock << endl;
-            found = true;
-        }
-
+    while (current != NULL && current->name != name) {
+        previous = current;
         current = current->next;
     }
 
-    if(!found){
-        cout << "Articulo no encontrado" << endl;
-    } 
-
-    return found;
-}
-
-// TODO verificar porque imprime en consola 0 | | | | 0 al momento de mostrar la lista, seguir revisando la funcion
-void remove(Article *&list, string name) {
-    
-    Article *auxRemove;
-    Article *previous = NULL;
-
-    auxRemove = list;
-
-    while((auxRemove != NULL) && (auxRemove->name != name)){
-        previous = auxRemove;
-        auxRemove = auxRemove->next;
+    if (current == NULL) {
+        cout << "El artículo no se encontró en la lista." << endl;
+        return;
     }
 
-    if (auxRemove == NULL){
-        cout << "El elemento no ha sido encontrado";
-    } else if(previous == NULL) {
-        list = list->next;
-        delete auxRemove;
-        // TODO: NO funciona bien esta condicional
-        if (list != NULL && list->next == NULL && list->name == "") {
-            delete list;
-            list = NULL;
-        }
-    } else {
-        previous->next = auxRemove->next;
-        delete auxRemove;
-        if (previous->next != NULL && previous->next->next == NULL && previous->next->name == "") {
-            delete previous->next;
-            previous->next = NULL;
-        }
+    if (previous == NULL) { // El artículo a eliminar es el primer elemento
+        list = current->next;
+    } else { // El artículo a eliminar está en medio o al final de la lista
+        previous->next = current->next;
     }
-}
+    delete current;
+    showArticles(list);
 
+}
 
 
 void removeStock(Article *&list, string name){
