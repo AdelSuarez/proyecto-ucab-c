@@ -31,12 +31,12 @@ int main() {
 
         system("cls");
         if (loadingArticles){
-            cout << "Se han cargado los articulos -> " << key <<endl << endl;
+            cout << "> Se han cargado los articulos -> " GREEN << key<< "" NC<<endl << endl;
             loadingArticles = false;
         }
         
 
-        cout << "\t-TIENDA DE ARTICULOS-" << endl;
+        cout << BLUE "\t-TIENDA DE ARTICULOS-" NC << endl;
         cout << "1 - Ingresar nuevo articulo " << endl;
         cout << "2 - Editar articulo " << endl;
         cout << "3 - Eliminar articulo" << endl;
@@ -63,7 +63,7 @@ int main() {
             case 1:
                 // add article
                 system("cls");
-                cout << "\t-INGRESAR NUEVO ARTICULO-" << endl;
+                cout << BLUE "\t-INGRESAR NUEVO ARTICULO-" NC<< endl;
                 cout << "Introduce el codigo >> ";
                 getline(cin, code);
                 cout << "Introduce el nombre >> ";
@@ -104,22 +104,30 @@ int main() {
 
             case 3:
                 system("cls");
-                cout << "\t-ELIMINAR ARTICULO- "<< endl;
+                cout << BLUE "\t-ELIMINAR ARTICULO- " NC<< endl;
                 
                 if (LArticles != NULL) {
                     cout << "Introduce el nombre: ";
                     getline(cin, name);
                     removeArticles(LArticles, name);
                     showArticles(LArticles);
-
-
-
                 } else {
                     cout << "No existen articulos. Presione un boton para continuar";
                     getch();
                 }
                 break; 
-                
+
+            case 4:
+                system("cls");
+
+                if (LArticles != NULL){
+                    searchArticle(LArticles);
+
+                } else {
+                    cout << "No existen articulos. Presione un boton para continuar";
+                    getch();
+                }
+                break;
             case 6:
                 showArticles(LArticles);
                 break;
@@ -131,7 +139,8 @@ int main() {
             case 0:
                 break;
             default:
-                cout << "Opcion no valida" << endl;
+                cout << " " << REDB "Opcion no valida" NC;
+                getch();
                 break;
             }
     }while (opt != 0);

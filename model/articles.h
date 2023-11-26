@@ -2,6 +2,7 @@
 #include<string>
 #include <iomanip>
 #include<conio.h>
+#include <functional>
 #include"../settings/style.h"
 
 
@@ -59,7 +60,7 @@ void addArticle(Article *&list, Article *article, bool isFile){
 
     }
     if (!isFile){
-        cout << "\tAgregado con exito"<< endl << endl;
+        cout << GREEN "\tAgregado con exito" NC << endl << endl;
         cout << "Presiona cualquier boton para continuar ";
 
         getch();
@@ -85,10 +86,10 @@ void editArticle(Article *&list, string name ){
         fflush(stdin);
         cout << "\tOPCIONES"<< endl;
         cout << "Clave " << current->key << "    | ARTICULO"<< endl;
-        cout << left << setw(1) << "1-" << setw(9) << "Nombre"<< "| " << setw(12) << current->name << (isName ? GRN "*" NC: "") << endl;
-        cout << left << setw(1) << "2-" << setw(9) << "Codigo"<< "| " << setw(12) << current->code << (isCode ? GRN "*" NC: "") << endl;
-        cout << left << setw(1) << "3-" << setw(9) << "Precio"<< "| " << setw(12) << current->price << (isPrice ? GRN "*" NC: "") << endl;
-        cout << left << setw(1) << "4-" << setw(9) << "Stock"<< "| " << setw(12) << current->stock << (isStock ? GRN "*" NC: "") << endl;
+        cout << left << setw(1) << "1-" << setw(9) << "Nombre"<< "| " << setw(12) << current->name << (isName ? GREEN "*" NC: "") << endl;
+        cout << left << setw(1) << "2-" << setw(9) << "Codigo"<< "| " << setw(12) << current->code << (isCode ? GREEN "*" NC: "") << endl;
+        cout << left << setw(1) << "3-" << setw(9) << "Precio"<< "| " << setw(12) << current->price << (isPrice ? GREEN "*" NC: "") << endl;
+        cout << left << setw(1) << "4-" << setw(9) << "Stock"<< "| " << setw(12) << current->stock << (isStock ? GREEN "*" NC: "") << endl;
         cout << "0- Salir" << endl;
         cout << "Introduce la opcion >> ";
         cin >> option;
@@ -146,7 +147,7 @@ void editArticle(Article *&list, string name ){
         case 0:
             break;
         default:
-            cout << "La opcion no existe";
+            cout << " " << REDB "La opcion no existe" NC;
             getch();
             break;
         }
@@ -161,11 +162,13 @@ void showArticles(Article *&list) {
     current = list;
 
     if (list != NULL) {
-        cout << "\t\t-LISTA ARTICULOS-" << endl;
-        cout << left << setw(10) << "KEY" << setw(15) << "CODE" << setw(20) << "NOMBRE" << setw(10) << "PRECIO" << setw(10) << "STOCK" << endl;
+        cout <<BLUE "\t\t\t-LISTA ARTICULOS-" NC<< endl;
+        cout << BLACK BLUEB ;
+        cout << left << setw(10) <<"KEY" << setw(15) << "CODE" << setw(20) << "NOMBRE" << setw(12) << "PRECIO" << setw(10) << "STOCK" << endl;
+        cout << NC;
 
             while(current != NULL){
-                cout << left << setw(10) << current->key << setw(12) << current->code << setw(23) << current->name << setw(10) << current->price << setw(11) << current->stock << endl;
+                cout << left << setw(10) << current->key << setw(12) << current->code << setw(23) << current->name << setw(7) << current->price << setw(5)<< "$" << setw(10) << current->stock << endl;
                 current = current->next;
             //     cout << "  " << current->key << "  | " << current->code << "  | " << current->name << " | " << current->price << " | " << current->stock <<endl;
             //     current = current->next;
@@ -183,11 +186,101 @@ void showArticles(Article *&list) {
     getch();
 }
 
-
-
-
 void remove(Article *&, string);
-bool searchArticle(Article *, string);
+
+void viewArticle(Article *article){
+    cout << endl << "ARTICULO: " << article->name <<endl;
+    cout << "CLAVE:  " << article->price << endl;
+    cout << "CODIGO: " << article->code << endl;
+    cout << "PRECIO: " << article->price << endl;
+    cout << "STOCK:  " << article->price << endl;
+
+}
+
+void searchArticle(Article *list){
+    string name;
+    float price;
+    int option, count;
+    long int stock;
+    Article* current = list;
+    
+    
+    
+    do{
+        system("cls");
+        count = 0;
+        cout << BLUE "\t-BUSCAR ARTICULO- " NC<< endl;
+        cout << "1- Nombre" << endl;
+        cout << "2- Precio" << endl;
+        cout << "3- Stock" << endl;
+        cout << "0- salir" << endl;
+        cout << "Introduce la opcion >> ";
+
+        cin >> option;
+        cin.ignore();
+
+        switch (option){
+            case 1:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
+                cout << "Introduce el nombre >> ";
+                getline(cin, name);
+                while(current != NULL) {
+                    if(current->name == name ) {
+                        viewArticle(current);
+                        count++;
+                    }
+                    current = current->next;
+                }
+                cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
+                getch();
+                break;
+            case 2:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR PRECIO" NC<< endl;
+                cout << "Introduce el precio >> ";
+                cin >> price;
+                while(current != NULL) {
+                    if(current->price == price ) {
+                        viewArticle(current);
+                        count++;
+                    }
+                    current = current->next;
+                }
+                cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
+                getch();
+                break;
+
+            case 3:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR STOCK" NC<< endl;
+                cout << "Introduce el stock >> ";
+                cin >> stock;
+                while(current != NULL) {
+                    if(current->stock == stock ) {
+                        viewArticle(current);
+                        count++;
+                    }
+                    current = current->next;
+                }
+                cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
+                getch();
+                break;
+
+            case 0:
+                break;
+
+            default:
+                cout << " " << REDB "La opcion no existe" NC;
+                getch();
+                break;
+        } 
+
+
+    } while(option != 0);
+}
+
+
 
 
 void removeArticles(Article *list, string name){

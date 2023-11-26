@@ -38,3 +38,8 @@ Z0012
 cama
 55.00
 42
+ARTICULOS
+G001A
+Iphone
+800.00
+45
