@@ -75,15 +75,15 @@ int main() {
                 cin >> stock;
                 key++;
 
-                writeFile(key, code, name, price, stock);
                 addArticle(LArticles, creatArticle( key, code, name, price, stock), false);
+                writeFile(key, code, name, price, stock);
                 break;
             case 2:
                 system("cls");
 
                 // edit article
                 if (LArticles != NULL){
-                    cout << "\tEDITAR ARTICULO-" << endl;
+                    cout << BLUE "\t-EDITAR ARTICULO-" NC<< endl;
                     cout << "Introduce el nombre: ";
                     getline(cin, name);
 
@@ -91,6 +91,8 @@ int main() {
                     if(search(LArticles, name)){
                         editArticle(LArticles, name);
                         editFile(LArticles);
+                        cout << GREEN "Articulo editado con exito!" NC;
+                        getch();
                     } else{
                         cout << "\tArticulo no encontrado"<< endl;
                         cout << "Presione un boton para continuar.";

@@ -84,8 +84,8 @@ void editArticle(Article *&list, string name ){
     do {
         system("cls");
         fflush(stdin);
-        cout << "\tOPCIONES"<< endl;
-        cout << "Clave " << current->key << "    | ARTICULO"<< endl;
+        cout << BLUE "\t-OPCIONES-" NC<< endl;
+        cout << left << setw(1)<<"Clave "<< setw(5) << current->key  <<"| ARTICULO"<< endl;
         cout << left << setw(1) << "1-" << setw(9) << "Nombre"<< "| " << setw(12) << current->name << (isName ? GREEN "*" NC: "") << endl;
         cout << left << setw(1) << "2-" << setw(9) << "Codigo"<< "| " << setw(12) << current->code << (isCode ? GREEN "*" NC: "") << endl;
         cout << left << setw(1) << "3-" << setw(9) << "Precio"<< "| " << setw(12) << current->price << (isPrice ? GREEN "*" NC: "") << endl;
@@ -164,11 +164,11 @@ void showArticles(Article *&list) {
     if (list != NULL) {
         cout <<BLUE "\t\t\t-LISTA ARTICULOS-" NC<< endl;
         cout << BLACK BLUEB ;
-        cout << left << setw(10) <<"KEY" << setw(15) << "CODE" << setw(20) << "NOMBRE" << setw(12) << "PRECIO" << setw(10) << "STOCK" << endl;
+        cout << left << setw(10) <<"KEY" << setw(15) << "CODE" << setw(20) << "NOMBRE" << setw(12) << "PRECIO" << setw(7) << "STOCK" << endl;
         cout << NC;
 
             while(current != NULL){
-                cout << left << setw(10) << current->key << setw(12) << current->code << setw(23) << current->name << setw(7) << current->price << setw(5)<< "$" << setw(10) << current->stock << endl;
+                cout << left << setw(10) << current->key << setw(12) << current->code << setw(23) << current->name << setw(7) << current->price << setw(5)<< "$" << setw(7) << current->stock << endl;
                 current = current->next;
             //     cout << "  " << current->key << "  | " << current->code << "  | " << current->name << " | " << current->price << " | " << current->stock <<endl;
             //     current = current->next;
@@ -177,7 +177,6 @@ void showArticles(Article *&list) {
         //     cout << "La lista de articulos esta vacia";
         //     // list = NULL;
         // }
-
     } else {
         cout << "La lista de articulos esta vacia";
     }
@@ -190,10 +189,10 @@ void remove(Article *&, string);
 
 void viewArticle(Article *article){
     cout << endl << "ARTICULO: " << article->name <<endl;
-    cout << "CLAVE:  " << article->price << endl;
+    cout << "CLAVE:  " << article->key << endl;
     cout << "CODIGO: " << article->code << endl;
     cout << "PRECIO: " << article->price << endl;
-    cout << "STOCK:  " << article->price << endl;
+    cout << "STOCK:  " << article->stock << endl;
 
 }
 

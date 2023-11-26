@@ -1,8 +1,8 @@
 ARTICULOS
 B100E
 bolsa
-0.50
-100
+5.23
+69
 ARTICULOS
 B0004
 pelota
@@ -43,3 +43,8 @@ G001A
 Iphone
 800.00
 45
+ARTICULOS
+G00E1
+yate
+150000.00
+1
