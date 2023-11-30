@@ -27,24 +27,24 @@ void createFile(){
 
 }
 
-void writeFile(long int key, string code, string name, float price, int stock){
-    ofstream file;
-    file.open(DB.c_str(), ios::app);
+// void writeFile(long int key, string code, string name, float price, int stock){
+//     ofstream file;
+//     file.open(DB.c_str(), ios::app);
 
-    if (file.fail()){
-        cout << "No se puede abrir el archivo";
-    } else {
-        file << code << endl;
-        file << name << endl;
-        file << std::fixed << std::setprecision(2) << price << endl;  // Aquí es donde se escribe el precio con precisión decimal
-        file << stock << endl;
-    }
-    file.close();   
-}
+//     if (file.fail()){
+//         cout << "No se puede abrir el archivo";
+//     } else {
+//         file << code << endl;
+//         file << name << endl;
+//         file << std::fixed << std::setprecision(2) << price << endl;  // Aquí es donde se escribe el precio con precisión decimal
+//         file << stock << endl;
+//     }
+//     file.close();   
+// }
 
 
 
-void readFile(Article *&list,long int &currentKey){
+void readFile(Article *&list, long int &currentKey){
 
     ifstream file;
     
@@ -83,19 +83,18 @@ void readFile(Article *&list,long int &currentKey){
     currentKey = key;
     file.close();
 }
-
-void editFile(Article *&list){
+// file upload
+void fileUpload(Article *&list){
     ofstream file;
-    file.open(DB.c_str(), ios::out);  // Abre el archivo en modo de escritura, esto borrará el contenido existente
+    file.open(DB.c_str(), ios::out);  // Abre el archivo en modo de escritura, esto borrará el contenido existente y carga toda la lista de nuevo
 
     if (file.fail()){
         cout << "No se puede abrir el archivo";
         return;
     }
-
     Article* current = list;
+    file << "ARTICULOS" << endl;
     while(current != NULL){
-        file << "ARTICULOS" << endl;
         file << current->code << endl;
         file << current->name << endl;
         file << std::fixed << std::setprecision(2) << current->price << endl;

@@ -1,5 +1,6 @@
 #include <iostream>
-#include<string>
+#include <string>
+#include <limits>
 #include"model/clients.h"
 #include"model/articles.h"
 #include"file.h"
@@ -21,6 +22,25 @@ int opt;
 
 void menuClient();
 
+
+// int validateNumber(string text) {
+//     int number;
+
+//     while (true) {
+//         cout << text;
+//         cin >> number;
+
+//         if (cin.fail()) {
+//             cin.clear(); // Restablece el estado de cin a 'bueno'
+//             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Descarta la entrada incorrecta
+//             cout << REDB "No se aceptan letras, vuelve a intentar." NC<< endl;
+//             getch();
+//         } else {
+//             break; // Sal del bucle, la entrada es válida
+//         }
+//     }
+//     return number;
+// }
 
 int main() {
     readFile(LArticles, key);
@@ -54,8 +74,9 @@ int main() {
         cout << "0 - Salir " << endl;
         cout << "V0.0.1.5 " << endl << endl;
 
-        cout << "Introduce la opcion >> ";
-        cin >> opt;
+        // cout << "Introduce la opcion >> ";
+        // cin >> opt;
+        opt = validateNumber("Introduce la opcion >> ");
         cin.ignore();
 
         
@@ -76,7 +97,8 @@ int main() {
                 key++;
 
                 addArticle(LArticles, creatArticle( key, code, name, price, stock), false);
-                writeFile(key, code, name, price, stock);
+                fileUpload(LArticles);
+                
                 break;
             case 2:
                 system("cls");
@@ -90,11 +112,11 @@ int main() {
 
                     if(search(LArticles, name)){
                         editArticle(LArticles, name);
-                        editFile(LArticles);
+                        fileUpload(LArticles);
                         cout << GREEN "Articulo editado con exito!" NC;
                         getch();
                     } else{
-                        cout << "\tArticulo no encontrado"<< endl;
+                        cout << " Articulo no existe!"<< endl;
                         cout << "Presione un boton para continuar.";
                         getch();
                     }
@@ -112,7 +134,9 @@ int main() {
                     cout << "Introduce el nombre: ";
                     getline(cin, name);
                     removeArticles(LArticles, name);
-                    showArticles(LArticles);
+                    fileUpload(LArticles);
+                    cout << BLACK GREENB " Articulo borrado con exito!" NC;
+                    getch();
                 } else {
                     cout << "No existen articulos. Presione un boton para continuar";
                     getch();
@@ -120,6 +144,7 @@ int main() {
                 break; 
 
             case 4:
+
                 system("cls");
 
                 if (LArticles != NULL){

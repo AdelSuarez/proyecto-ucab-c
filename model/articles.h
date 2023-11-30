@@ -3,7 +3,9 @@
 #include <iomanip>
 #include<conio.h>
 #include <functional>
+#include"validation.h"
 #include"../settings/style.h"
+
 
 
 using namespace std;
@@ -91,8 +93,10 @@ void editArticle(Article *&list, string name ){
         cout << left << setw(1) << "3-" << setw(9) << "Precio"<< "| " << setw(12) << current->price << (isPrice ? GREEN "*" NC: "") << endl;
         cout << left << setw(1) << "4-" << setw(9) << "Stock"<< "| " << setw(12) << current->stock << (isStock ? GREEN "*" NC: "") << endl;
         cout << "0- Salir" << endl;
-        cout << "Introduce la opcion >> ";
-        cin >> option;
+
+        option = validateNumber("Introduce la opcion >> ");
+        // cout << "Introuce la opcion >> ";
+        // cin >> option;
         cin.ignore();
         cout << endl;
 
@@ -185,7 +189,6 @@ void showArticles(Article *&list) {
     getch();
 }
 
-void remove(Article *&, string);
 
 void viewArticle(Article *article){
     cout << endl << "ARTICULO: " << article->name <<endl;
@@ -196,6 +199,8 @@ void viewArticle(Article *article){
 
 }
 
+
+// SEARCH ARTICLE -----------------
 void searchArticle(Article *list){
     string name;
     float price;
@@ -281,8 +286,9 @@ void searchArticle(Article *list){
 
 
 
-
-void removeArticles(Article *list, string name){
+// REMOVE ARTICLE ------------------------------
+void remove( Article *&, string);
+void removeArticles(Article *&list, string name){
     string opt;
 
     if(search(list, name)){
@@ -297,9 +303,9 @@ void removeArticles(Article *list, string name){
         }
 
     } else {
-        cout << "\t El articulo no existe!" << endl;
+        cout << REDB " El articulo no existe!" NC << endl;
+        getch();
     }
-    getch();
 
 }
 
@@ -312,44 +318,38 @@ void remove(Article *&list, string name) {
         current = current->next;
     }
 
-    if (current == NULL) {
-        cout << "El artículo no se encontró en la lista." << endl;
-        return;
-    }
-
     if (previous == NULL) { // El artículo a eliminar es el primer elemento
         list = current->next;
     } else { // El artículo a eliminar está en medio o al final de la lista
         previous->next = current->next;
     }
     delete current;
-    showArticles(list);
 
 }
 
 
-void removeStock(Article *&list, string name){
-    long int stockToRemove;
-    Article *current = list;
+// void removeStock(Article *&list, string name){
+//     long int stockToRemove;
+//     Article *current = list;
 
-        // Buscar el nodo con el DNI proporcionado
-    while(current != NULL && current->name != name){
-        current = current->next;
-    }
+//         // Buscar el nodo con el DNI proporcionado
+//     while(current != NULL && current->name != name){
+//         current = current->next;
+//     }
 
-    // Si el nodo fue encontrado, modificar sus valores
-    if (current != NULL){
-        // TODO la funcion no se a probado con este ciclo
+//     // Si el nodo fue encontrado, modificar sus valores
+//     if (current != NULL){
+//         // TODO la funcion no se a probado con este ciclo
         
-        do {
-            cout << "Introduce la cantidad de productos a eliminar: ";
-            cin >> stockToRemove;
+//         do {
+//             cout << "Introduce la cantidad de productos a eliminar: ";
+//             cin >> stockToRemove;
 
-        } while(stockToRemove >= current->stock);
+//         } while(stockToRemove >= current->stock);
 
         
-        current->stock = current->stock - stockToRemove;
-        cout << "Modificado con exito";
-    }
-}
+//         current->stock = current->stock - stockToRemove;
+//         cout << "Modificado con exito";
+//     }
+// }
 
