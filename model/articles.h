@@ -5,20 +5,7 @@
 #include <functional>
 #include"validation.h"
 #include"../settings/style.h"
-
-
-
 using namespace std;
-
-// STRUCT OF ARTICLE
-struct Article {
-    long int key;
-    string code;
-    string name;
-    float price;
-    long int stock;
-    Article *next;
-};
 
 
 // SEARCH ARTICLE ------------------------
@@ -65,7 +52,7 @@ void addArticle(Article *&list, Article *article, bool isFile){
         cout << GREEN "\tAgregado con exito" NC << endl << endl;
         cout << "Presiona cualquier boton para continuar ";
 
-        getch();
+        _getch();
     }
     
 }
@@ -110,7 +97,7 @@ void editArticle(Article *&list, string name ){
             cout << "+ Nombre editado con exito!";
             isName = true;
 
-            getch();
+            _getch();
             break;
 
         case 2:
@@ -122,7 +109,7 @@ void editArticle(Article *&list, string name ){
 
             cout << "+ Codigo editado con exito!";
             isCode = true;
-            getch();
+            _getch();
             break;
 
         case 3:
@@ -133,7 +120,7 @@ void editArticle(Article *&list, string name ){
             cout << "|" <<endl;
             cout << "+ Precio editado con exito!";
             isPrice = true;
-            getch();
+            _getch();
             break;
 
         case 4:
@@ -145,14 +132,14 @@ void editArticle(Article *&list, string name ){
             cout << "+ Stock editado con exito!";
             isStock = true;
             
-            getch();
+            _getch();
             break;
 
         case 0:
             break;
         default:
             cout << " " << REDB "La opcion no existe" NC;
-            getch();
+            _getch();
             break;
         }
     } while(option !=0);
@@ -165,28 +152,22 @@ void showArticles(Article *&list) {
     Article *current = new Article();
     current = list;
 
+    cout <<BLUE "\t\t\t-LISTA ARTICULOS-" NC<< endl;
     if (list != NULL) {
-        cout <<BLUE "\t\t\t-LISTA ARTICULOS-" NC<< endl;
         cout << BLACK BLUEB ;
         cout << left << setw(10) <<"KEY" << setw(15) << "CODE" << setw(20) << "NOMBRE" << setw(12) << "PRECIO" << setw(7) << "STOCK" << endl;
         cout << NC;
 
-            while(current != NULL){
-                cout << left << setw(10) << current->key << setw(12) << current->code << setw(23) << current->name << setw(7) << current->price << setw(5)<< "$" << setw(7) << current->stock << endl;
-                current = current->next;
-            //     cout << "  " << current->key << "  | " << current->code << "  | " << current->name << " | " << current->price << " | " << current->stock <<endl;
-            //     current = current->next;
-            } 
-        // } else {
-        //     cout << "La lista de articulos esta vacia";
-        //     // list = NULL;
-        // }
+        while(current != NULL){
+            cout << left << setw(10) << current->key << setw(12) << current->code << setw(23) << current->name << setw(7) << current->price << setw(5)<< "$" << setw(7) << current->stock << endl;
+            current = current->next;
+        } 
     } else {
-        cout << "La lista de articulos esta vacia";
+        cout << REDB "La lista de articulos esta vacia" NC;
     }
     cout << endl;
     cout << "Presione cualquier tecla para continuar";
-    getch();
+    _getch();
 }
 
 
@@ -196,7 +177,6 @@ void viewArticle(Article *article){
     cout << "CODIGO: " << article->code << endl;
     cout << "PRECIO: " << article->price << endl;
     cout << "STOCK:  " << article->stock << endl;
-
 }
 
 
@@ -207,8 +187,6 @@ void searchArticle(Article *list){
     int option, count;
     long int stock;
     Article* current = list;
-    
-    
     
     do{
         system("cls");
@@ -237,7 +215,7 @@ void searchArticle(Article *list){
                     current = current->next;
                 }
                 cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-                getch();
+                _getch();
                 break;
             case 2:
                 system("cls");
@@ -252,7 +230,7 @@ void searchArticle(Article *list){
                     current = current->next;
                 }
                 cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-                getch();
+                _getch();
                 break;
 
             case 3:
@@ -268,7 +246,7 @@ void searchArticle(Article *list){
                     current = current->next;
                 }
                 cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-                getch();
+                _getch();
                 break;
 
             case 0:
@@ -276,14 +254,13 @@ void searchArticle(Article *list){
 
             default:
                 cout << " " << REDB "La opcion no existe" NC;
-                getch();
+                _getch();
                 break;
         } 
 
 
     } while(option != 0);
 }
-
 
 
 // REMOVE ARTICLE ------------------------------
@@ -304,7 +281,7 @@ void removeArticles(Article *&list, string name){
 
     } else {
         cout << REDB " El articulo no existe!" NC << endl;
-        getch();
+        _getch();
     }
 
 }
@@ -324,6 +301,7 @@ void remove(Article *&list, string name) {
         previous->next = current->next;
     }
     delete current;
+    cout << BLACK GREENB " Articulo borrado con exito!" NC;
 
 }
 

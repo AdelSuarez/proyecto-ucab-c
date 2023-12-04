@@ -1,15 +1,8 @@
 #include <iostream>
 #include<string>
 #include<conio.h>
-#include "person.h"
+#include "struct.h"
 using namespace std;
-
-struct Client {
-    Person client;
-    string address;
-    long long int number;
-    Client *next;
-};
 
 void addLClient(Client *&list, long long int dni, string name, string address, long long int number) {
     Client *newClient = new Client(); // Create a new node to introduce into the list 
@@ -49,7 +42,7 @@ void showClients(Client *list) {
     }
     cout << endl;
     cout << "Presione cualquier tecla para continuar";
-    getch();
+    _getch();
 }
 
 
@@ -112,7 +105,7 @@ void editClient(Client *&list, long long int dni){
         } else {
             // Si el nodo no fue encontrado, imprimir un mensaje
             cout << "El elemento no ha sido encontrado";
-            getch();
+            _getch();
         }
     }
 }
@@ -135,5 +128,5 @@ void searchClient(Client* list, long int dni, string name){
     }
     cout << endl;
     cout << "Presione cualquier tecla para continuar";
-    getch();
+    _getch();
 }

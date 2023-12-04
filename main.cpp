@@ -22,26 +22,6 @@ int opt;
 
 void menuClient();
 
-
-// int validateNumber(string text) {
-//     int number;
-
-//     while (true) {
-//         cout << text;
-//         cin >> number;
-
-//         if (cin.fail()) {
-//             cin.clear(); // Restablece el estado de cin a 'bueno'
-//             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Descarta la entrada incorrecta
-//             cout << REDB "No se aceptan letras, vuelve a intentar." NC<< endl;
-//             getch();
-//         } else {
-//             break; // Sal del bucle, la entrada es válida
-//         }
-//     }
-//     return number;
-// }
-
 int main() {
     readFile(LArticles, key);
     createFile();
@@ -114,15 +94,15 @@ int main() {
                         editArticle(LArticles, name);
                         fileUpload(LArticles);
                         cout << GREEN "Articulo editado con exito!" NC;
-                        getch();
+                        _getch();
                     } else{
                         cout << " Articulo no existe!"<< endl;
                         cout << "Presione un boton para continuar.";
-                        getch();
+                        _getch();
                     }
                 } else {
                     cout << "No existen articulos. Presione un boton para continuar";
-                    getch(); 
+                    _getch(); 
                 }
                 break;
 
@@ -135,11 +115,9 @@ int main() {
                     getline(cin, name);
                     removeArticles(LArticles, name);
                     fileUpload(LArticles);
-                    cout << BLACK GREENB " Articulo borrado con exito!" NC;
-                    getch();
                 } else {
                     cout << "No existen articulos. Presione un boton para continuar";
-                    getch();
+                    _getch();
                 }
                 break; 
 
@@ -152,7 +130,7 @@ int main() {
 
                 } else {
                     cout << "No existen articulos. Presione un boton para continuar";
-                    getch();
+                    _getch();
                 }
                 break;
             case 6:
@@ -167,7 +145,7 @@ int main() {
                 break;
             default:
                 cout << " " << REDB "Opcion no valida" NC;
-                getch();
+                _getch();
                 break;
             }
     }while (opt != 0);
@@ -218,7 +196,7 @@ void menuClient(){
 
                 cout << name << " " << address << " " << number << " " << dni<< endl;
                 addLClient(LClient, dni, name,  address, number);
-                getch();
+                _getch();
 
                 break;
             case 2:

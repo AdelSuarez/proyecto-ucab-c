@@ -15,7 +15,7 @@ int validateNumber(string text) {
             cin.clear(); // Restablece el estado de cin a 'bueno'
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Descarta la entrada incorrecta
             cout << REDB "No se aceptan letras, vuelve a intentar." NC<< endl;
-            getch();
+            _getch();
         } else {
             break; // Sal del bucle, la entrada es válida
         }
