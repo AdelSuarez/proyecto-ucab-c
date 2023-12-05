@@ -4,22 +4,20 @@
 
 using namespace std;
 
-int validateNumber(string text) {
-    int number;
+float validateNumber(string text) {
+    float number;
 
     while (true) {
         cout << text;
         cin >> number;
 
         if (cin.fail()) {
-            cin.clear(); // Restablece el estado de cin a 'bueno'
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Descarta la entrada incorrecta
+            cin.clear(); // Restores the state of cin to 'good'
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discards the incorrect input
             cout << REDB "No se aceptan letras, vuelve a intentar." NC<< endl;
-            _getch();
         } else {
-            break; // Sal del bucle, la entrada es válida
+            break; // Exit the loop, the input is valid
         }
     }
     return number;
 }
-
