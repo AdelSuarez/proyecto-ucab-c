@@ -14,7 +14,7 @@ Article *LArticles = NULL;
 
 bool loadingArticles = true;
 long long int number, dni;
-long int key, stock;
+long int keyArticles, stock, isKey;
 float price;
 string name, address, code;
 int opt;
@@ -23,7 +23,7 @@ int opt;
 void menuClient();
 
 int main() {
-    readFile(LArticles, key);
+    readFile(LArticles, keyArticles);
     createFile();
     
     do{
@@ -31,7 +31,8 @@ int main() {
 
         system("cls");
         if (loadingArticles){
-            cout << "> Se han cargado los articulos -> " GREEN << key<< "" NC<<endl << endl;
+            cout << "CARGANDO BD..." << endl;  
+            cout << "ARTICULOS" << (keyArticles == 0? RED : GREEN) <<"["<< keyArticles<< "]" NC<< " | " << "VENDEDORES" << GREEN <<"["<< "0" << "]" NC<< " | " << "CLIENTES" << GREEN <<"["<< "0" << "]" NC<<endl << endl;
             loadingArticles = false;
         }
         
@@ -52,7 +53,7 @@ int main() {
         cout << "12 - Menu Gestion de Vendedores " << endl;
 
         cout << "0 - Salir " << endl;
-        cout << "V0.0.1.5 " << endl << endl;
+        cout << "V0.1.2.8 " << endl << endl;
 
         // cout << "Introduce la opcion >> ";
         // cin >> opt;
@@ -69,51 +70,46 @@ int main() {
                 getline(cin, code);
                 cout << "Introduce el nombre >> ";
                 getline(cin, name);
-                cout << "Introduce el precio >> ";
-                cin >> price;
 
-                cout << "Introduce el stock >> ";
-                cin >> stock;
-                key++;
+                price = validateNumber("Introduce el precio >> ");
+                stock = validateNumber("Introduce el stock >> ");
+                keyArticles++;
 
-                addArticle(LArticles, creatArticle( key, code, name, price, stock), false);
-                fileUpload(LArticles);
+                addArticle(LArticles, creatArticle( keyArticles, code, name, price, stock), false,fileUpload);
                 
                 break;
             case 2:
-                system("cls");
-
                 // edit article
+                system("cls");
                 if (LArticles != NULL){
                     cout << BLUE "\t-EDITAR ARTICULO-" NC<< endl;
-                    cout << "Introduce el nombre: ";
-                    getline(cin, name);
+                    isKey = validateNumber(" Introduce la clave >> ");
+
+                    Article *previous = NULL;
+                    Article *current = findArticle(LArticles, isKey, previous);
 
 
-                    if(search(LArticles, name)){
-                        editArticle(LArticles, name);
-                        fileUpload(LArticles);
-                        cout << GREEN "Articulo editado con exito!" NC;
-                        _getch();
+                    if(current != NULL){
+                        editArticle(LArticles, isKey, fileUpload);
                     } else{
                         cout << " Articulo no existe!"<< endl;
                         cout << "Presione un boton para continuar.";
                         _getch();
                     }
                 } else {
-                    cout << "No existen articulos. Presione un boton para continuar";
+                    cout << REDB "Lista vacia." NC;
                     _getch(); 
                 }
                 break;
 
             case 3:
+                fflush(stdin);
                 system("cls");
                 cout << BLUE "\t-ELIMINAR ARTICULO- " NC<< endl;
                 
                 if (LArticles != NULL) {
-                    cout << "Introduce el nombre: ";
-                    getline(cin, name);
-                    removeArticles(LArticles, name);
+                    isKey = validateNumber(" Introduce la clave >> ");
+                    removeArticles(LArticles, isKey);
                     fileUpload(LArticles);
                 } else {
                     cout << "No existen articulos. Presione un boton para continuar";

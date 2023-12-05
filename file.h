@@ -7,6 +7,8 @@ using namespace std;
 
 const string DB = "db/Articles.txt" ;
 
+void fileUpload(Article *&);
+
 void createFile(){
     ofstream file;
     ifstream infile(DB.c_str());
@@ -74,7 +76,7 @@ void readFile(Article *&list, long int &currentKey){
                 stock = stoi(text);
                 count = -1;
                 key++;
-                addArticle(list, creatArticle(key, code, name, price, stock), true);
+                addArticle(list, creatArticle(key, code, name, price, stock), true, fileUpload);
             }
             count++;
 

@@ -1,26 +1,10 @@
 ARTICULOS
-B100E
-cafe
-10.00
-69
-B0004
-pelota
-2.50
-15
-B0004
-lapiz
-0.90
-55
 A0001
 Yaris
 25000.00
 12
-A0012
-bate
-2.00
-12
 E0001
-condones
+Super condones
 2.50
 10
 B0043
@@ -39,11 +23,39 @@ G00E1
 yate
 150000.00
 1
-K0001
-carne de perro
-2.50
-70
 GH01
 dildo
 15.50
 15
+RR001
+pote
+2.50
+10
+H12EE
+ak47
+150.50
+12
+XXX01
+xnxx
+12.50
+1
+WUE01
+wuebos de toro
+100000.00
+1
+RR001
+Supra Toyota
+65000.00
+12
+GT001
+GTR nissan
+78000.00
+2
+0001
+casa
+150000.00
+1
+F911E
+Porche
+60000.00
+2
