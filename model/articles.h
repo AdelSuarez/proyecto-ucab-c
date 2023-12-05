@@ -1,6 +1,6 @@
-#include <iostream>
+#include<iostream>
 #include<string>
-#include <iomanip>
+#include<iomanip>   
 #include<conio.h>
 #include <functional>
 #include"validation.h"
@@ -8,19 +8,34 @@
 using namespace std;
 
 
-// SEARCH ARTICLE ------------------------
-bool search(Article *list , string name){
-    Article *current = list;
-    bool found = false;
+// // SEARCH ARTICLE ------------------------
+// bool search(Article *list , int long key ){
+//     Article *current = list;
+//     bool found = false;
 
-    while(current != NULL && !found) {
-        if(current->name == name) {
-            found = true;
-        }
+//     while(current != NULL && !found) {
+//         if(current->key == key) {
+//             found = true;
+//         }
+//         current = current->next;
+//     }
+//     return found;
+// }
+
+
+// FIND ARTICLE (SEARCH) ---------------------------------------------------
+Article* findArticle(Article *&list, int key, Article *&previous) {
+    Article *current = list;
+    previous = NULL;
+
+    while (current != NULL && current->key != key) {
+        previous = current;
         current = current->next;
     }
-    return found;
+
+    return current;
 }
+
 
 // CREATE ARTICLE -----------------------------------------------
 Article* creatArticle(long int key, string code, string name, float price, long int stock){
@@ -35,7 +50,7 @@ Article* creatArticle(long int key, string code, string name, float price, long 
 }
 
 // ADD ARTICLE ------------------------------------------------
-void addArticle(Article *&list, Article *article, bool isFile){
+void addArticle(Article *&list, Article *article, bool isFile, void (*fileUploadFunc)(Article *&)){
 
     if (list == NULL){
         list = article;
@@ -51,25 +66,24 @@ void addArticle(Article *&list, Article *article, bool isFile){
     if (!isFile){
         cout << GREEN "\tAgregado con exito" NC << endl << endl;
         cout << "Presiona cualquier boton para continuar ";
-
         _getch();
     }
+
+    fileUploadFunc(list);
     
 }
 
-
 // EDIT ARTICLE -------------------------------
-void editArticle(Article *&list, string name ){
+void editArticle(Article *&list, int long key,void (*fileUploadFunc)(Article *&) ){
     bool isName = false, isCode = false, isPrice = false, isStock = false;
     int option;
     long int newStock;
     float newPrice;
     string newName, newCode;
 
-    Article *current = list;
-    while(current != NULL && current->name != name){
-        current = current->next;
-    }
+    Article *previous = NULL;
+    Article *current = findArticle(list, key, previous);
+
     do {
         system("cls");
         fflush(stdin);
@@ -82,65 +96,68 @@ void editArticle(Article *&list, string name ){
         cout << "0- Salir" << endl;
 
         option = validateNumber("Introduce la opcion >> ");
-        // cout << "Introuce la opcion >> ";
-        // cin >> option;
         cin.ignore();
-        cout << endl;
 
         switch (option){
-        case 1:
-            cout << "+\tEditar nombre" << endl;
-            cout << "| Nuevo nombre: ";
-            getline(cin, newName);
-            current->name = newName;
-            cout << "|" <<endl;
-            cout << "+ Nombre editado con exito!";
-            isName = true;
+            case 1:
+                cout << endl;
+                cout << "+\tEditar nombre" << endl;
+                cout << "| Nuevo nombre: ";
+                getline(cin, newName);
+                current->name = newName;
+                cout << "|" <<endl;
+                cout << "+ "<<GREEN "Nombre editado con exito!" NC;
+                isName = true;
+                fileUploadFunc(list);
 
-            _getch();
-            break;
+                _getch();
+                break;
 
-        case 2:
-            cout << "+\tEditar codigo" << endl;
-            cout << "| Nuevo codigo >> ";
-            getline(cin, newCode);
-            current->code = newCode;
-            cout << "|" <<endl;
+            case 2:
+                cout << endl;
+                cout << "+\tEditar codigo" << endl;
+                cout << "| Nuevo codigo >> ";
+                getline(cin, newCode);
+                current->code = newCode;
+                cout << "|" <<endl;
 
-            cout << "+ Codigo editado con exito!";
-            isCode = true;
-            _getch();
-            break;
+                cout << "+ "<<GREEN "Codigo editado con exito!" NC;
+                isCode = true;
+                fileUploadFunc(list);
 
-        case 3:
-            cout << "+\tEditar price" << endl;
-            cout << "| Nuevo precio >> ";
-            cin >> newPrice;
-            current->price = newPrice;
-            cout << "|" <<endl;
-            cout << "+ Precio editado con exito!";
-            isPrice = true;
-            _getch();
-            break;
+                _getch();
+                break;
 
-        case 4:
-            cout << "+\tEditar stock" << endl;
-            cout << "| Nuevo stock >> ";
-            cin >> newStock;
-            current->stock = newStock;
-            cout << "|" <<endl;
-            cout << "+ Stock editado con exito!";
-            isStock = true;
-            
-            _getch();
-            break;
+            case 3:
+                cout << endl;
+                cout << "+\tEditar price" << endl;
+                newPrice = validateNumber("| Nuevo precio >> ");
+                current->price = newPrice;
+                cout << "|" <<endl;
+                cout << "+ "<<GREEN "Precio editado con exito!" NC;
+                isPrice = true;
+                fileUploadFunc(list);
+                _getch();
+                break;
 
-        case 0:
-            break;
-        default:
-            cout << " " << REDB "La opcion no existe" NC;
-            _getch();
-            break;
+            case 4:
+                cout << endl;
+                cout << "+\tEditar stock" << endl;
+                newStock = validateNumber("| Nuevo stock >> ");
+                current->stock = newStock;
+                cout << "|" <<endl;
+                cout << "+ "<<GREEN "Stock editado con exito!" NC;
+                isStock = true;
+                fileUploadFunc(list);
+                _getch();
+                break;
+
+            case 0:
+                break;
+            default:
+                cout << REDB "La opcion no existe" NC;
+                _getch();
+                break;
         }
     } while(option !=0);
 }
@@ -171,16 +188,10 @@ void showArticles(Article *&list) {
 }
 
 
-void viewArticle(Article *article){
-    cout << endl << "ARTICULO: " << article->name <<endl;
-    cout << "CLAVE:  " << article->key << endl;
-    cout << "CODIGO: " << article->code << endl;
-    cout << "PRECIO: " << article->price << endl;
-    cout << "STOCK:  " << article->stock << endl;
-}
 
 
 // SEARCH ARTICLE -----------------
+void viewArticle(Article *);
 void searchArticle(Article *list){
     string name;
     float price;
@@ -220,8 +231,7 @@ void searchArticle(Article *list){
             case 2:
                 system("cls");
                 cout << BLUE "\t BUSQUEDA POR PRECIO" NC<< endl;
-                cout << "Introduce el precio >> ";
-                cin >> price;
+                price = validateNumber("Introduce el precio >> ");
                 while(current != NULL) {
                     if(current->price == price ) {
                         viewArticle(current);
@@ -236,8 +246,7 @@ void searchArticle(Article *list){
             case 3:
                 system("cls");
                 cout << BLUE "\t BUSQUEDA POR STOCK" NC<< endl;
-                cout << "Introduce el stock >> ";
-                cin >> stock;
+                stock = validateNumber("Introduce el stock >> ");
                 while(current != NULL) {
                     if(current->stock == stock ) {
                         viewArticle(current);
@@ -261,20 +270,29 @@ void searchArticle(Article *list){
 
     } while(option != 0);
 }
+void viewArticle(Article *article){
+    cout << endl << "ARTICULO: " << article->name <<endl;
+    cout << "CLAVE:  " << article->key << endl;
+    cout << "CODIGO: " << article->code << endl;
+    cout << "PRECIO: " << article->price << endl;
+    cout << "STOCK:  " << article->stock << endl;
+}
 
 
 // REMOVE ARTICLE ------------------------------
-void remove( Article *&, string);
-void removeArticles(Article *&list, string name){
+void remove( Article *&,Article *, Article *,  int long);
+void removeArticles(Article *&list, int long key){
     string opt;
+    Article *previous = NULL;
+    Article *current = findArticle(list, key, previous);
 
-    if(search(list, name)){
-        
-        cout << "Articulo: "<< name << endl;
+    if(current != NULL){
+        fflush(stdin);
+        cout << "Articulo: " << current->name << endl;
         cout << "Desea eliminar el articulo (s/n) >> ";
         getline(cin, opt);
         if ((opt == "s") ||(opt == "S")){
-            remove(list, name);
+            remove(list,current, previous,  key);
         } else {
             return;
         }
@@ -286,13 +304,13 @@ void removeArticles(Article *&list, string name){
 
 }
 
-void remove(Article *&list, string name) {
-    Article *current = list;
-    Article *previous = NULL;
 
-    while (current != NULL && current->name != name) {
-        previous = current;
-        current = current->next;
+void remove(Article *&list, Article *current, Article *previous, int long key) {
+
+    if (current == NULL) {
+        cout << BLACK REDB " Articulo no encontrado!" NC;
+        _getch();
+        return;
     }
 
     if (previous == NULL) { // El artículo a eliminar es el primer elemento
@@ -302,8 +320,9 @@ void remove(Article *&list, string name) {
     }
     delete current;
     cout << BLACK GREENB " Articulo borrado con exito!" NC;
-
+    _getch();
 }
+
 
 
 // void removeStock(Article *&list, string name){
