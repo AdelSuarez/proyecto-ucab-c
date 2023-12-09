@@ -1,10 +1,10 @@
-#include <iostream>
-#include <string>
-#include <iomanip>
-#include <conio.h>
-#include "struct.h"
-#include "validation.h"
-#include "../settings/style.h"
+// #include <iostream>
+// #include <string>
+// #include <iomanip>
+// #include <conio.h>
+// #include "struct.h"
+// #include "validation.h"
+// #include "../settings/style.h"
 
 using namespace std;
 

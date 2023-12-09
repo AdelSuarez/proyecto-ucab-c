@@ -1,33 +1,40 @@
 #include <iostream>
+#include <iomanip>   
 #include <string>
 #include <limits>
-#include"model/clients.h"
-#include"model/articles.h"
-#include"file.h"
-
-#include<conio.h>
-
+#include "model/validation.h"
+#include "model/struct.h"
+#include "model/seller.h"
+#include "model/clients.h"
+#include "model/articles.h"
+#include "model/node.h"
+#include "file.h"
+#include <conio.h>
+#include "settings/style.h"
 using namespace std;
 
 
 // List------------------
 Client *LClient = NULL;
 Article *LArticles = NULL;
+Seller *LSeller = NULL;
 
 // variables----------------
 bool loadingArticles = true;
 long long int number, dni;
-long int keyArticles, stock, isKey, counterCLient;
+long int keyArticles, stock, isKey, counterCLient, counterSeller;
 float price;
 string name, address, code;
 int opt;
 
-
+void menuSeller();
 void menuClient();
 
 int main() {
     readFileArticle(LArticles, keyArticles);
     readFileClient(LClient, counterCLient);
+    readFileSeller(LSeller, counterSeller);
+
     createFile("ARTICULOS",DBArticles);
     createFile("CLIENTES",DBClients);
     createFile("VENDEDORES",DBSellers);
@@ -38,7 +45,7 @@ int main() {
         system("cls");
         if (loadingArticles){
             cout << "CARGANDO BD..." << endl;  
-            cout << "ARTICULOS" << (keyArticles == 0? RED : GREEN) <<"["<< keyArticles<< "]" NC<< " | " << "VENDEDORES" << (counterCLient == 0? RED : GREEN) <<"["<< counterCLient << "]" NC<< " | " << "CLIENTES" << GREEN <<"["<< "0" << "]" NC<<endl << endl;
+            cout << "ARTICULOS" << (keyArticles == 0? RED : GREEN) <<"["<< keyArticles << "]" NC << " | " << "VENDEDORES" << (counterSeller == 0? RED : GREEN) <<"["<< counterSeller << "]" NC << " | " << "CLIENTES" <<(counterCLient == 0? RED : GREEN) <<"["<< counterCLient << "]" NC<<endl << endl;
             loadingArticles = false;
         }
         
@@ -79,7 +86,7 @@ int main() {
                 stock = validateNumber("Introduce el stock >> ");
                 keyArticles++;
 
-                addArticle(LArticles, createArticle( keyArticles, code, name, price, stock), false,fileUploadArticle);
+                addNode(LArticles, createArticle( keyArticles, code, name, price, stock), false,fileUploadArticle);
                 _getch();
                 
                 break;
@@ -142,6 +149,10 @@ int main() {
                 // MENU CLIENT
                 menuClient();
                 break;
+
+            case 12:
+                menuSeller();
+                break;
             case 0:
                 break;
             default:
@@ -160,15 +171,14 @@ void menuClient(){
 
         system("cls");
         cout << BLUE "\t-GESTION DE CLIENTES-" NC<< endl;
-        cout << "1 - Agregar un cliente nuevo " << endl;
+        cout << "1 - Agregar cliente " << endl;
         cout << "2 - Editar cliente " << endl;
         cout << "3 - Buscar cliente " << endl;
         cout << "4 - Eliminar cliente " << endl;
         cout << "5 - Mostar lista de clientes" << endl;
         cout << "0 - Salir " << endl << endl;
 
-        cout << "Introduce la opcion >> ";
-        cin >> opt;
+        opt = validateNumber("Introduce la opcion >> ");
         cin.ignore();
 
         
@@ -243,9 +253,71 @@ void menuClient(){
             case 0:
                 break;
             default:
-                cout << "Opcion no valida" << endl;
+                cout << " " << REDB "Opcion no valida" NC;
+                _getch();
                 break;
             }
     }while (opt != 0);
 
+}
+
+
+
+void menuSeller(){
+    int opt, day, month, year, comission;
+    do {
+        fflush(stdin);
+
+        system("cls");
+        cout << BLUE "\t-GESTION DE VENDEDORES-" NC<< endl;
+        cout << "1 - Agregar vendedor " << endl;
+        cout << "2 - Editar vendedor " << endl;
+        cout << "3 - Buscar vendedor " << endl;
+        cout << "4 - Eliminar vendedor " << endl;
+        cout << "5 - Mostar lista de vendedores" << endl;
+        cout << "0 - Salir " << endl << endl;
+
+        opt = validateNumber("Introduce la opcion >> ");
+
+        switch (opt) {
+        case 1:
+            // ADD CLIENT 
+            system("cls");
+            fflush(stdin);
+            cout << BLUE "\t-AGREGAR NUEVO VENDEDOR-" NC << endl;
+
+            dni = validateNumber("DNI del vendedor >> ");
+            cin.ignore();
+
+            fflush(stdin);
+            cout << "Nombre del vendedor: ";
+            getline(cin, name);
+
+            fflush(stdin);
+            cout << "-Fecha de admision: "<<endl;
+            day = validateNumber("Dia >> ");
+            month = validateNumber("Mes >> ");
+            year = validateNumber("Año >> ");
+
+            cout << endl;
+
+            comission = validateNumber("Comision del vendedor >> ");
+
+            cin.ignore();
+            addNode(LSeller, createSeller(dni, name,  day, month, year,comission),false, fileUploadSeller);
+            _getch();
+
+            break;
+        
+        case 5:
+            showSellers(LSeller);
+            break;
+
+
+        default:
+            break;
+        }
+
+
+    } while (opt != 0);
 }

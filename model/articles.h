@@ -1,10 +1,10 @@
-#include <iostream>
-#include <string>
-#include <iomanip>   
-#include <conio.h>
+// #include <iostream>
+// #include <string>
+// #include <iomanip>   
+// #include <conio.h>
 #include <functional>
 // #include "validation.h"
-#include "../settings/style.h"
+// #include "../settings/style.h"
 using namespace std;
 
 
@@ -34,27 +34,27 @@ Article* createArticle(long int key, string code, string name, float price, long
     return article;
 }
 
-// ADD ARTICLE ------------------------------------------------
-void addArticle(Article *&list, Article *article, bool isFile, void (*fileUploadFunc)(Article *&)){
 
-    if (list == NULL){
-        list = article;
+// void addArticle(Article *&list, Article *article, bool isFile, void (*fileUploadFunc)(Article *&)){
 
-    } else {
-        Article *current = list;
-        while(current->next != NULL){
-            current = current->next;
-        }
-        current->next = article;
+//     if (list == NULL){
+//         list = article;
 
-    }
-    if (!isFile){
-        cout << BLACK GREENB "\tAgregado con exito" NC << endl << endl;
-    }
+//     } else {
+//         Article *current = list;
+//         while(current->next != NULL){
+//             current = current->next;
+//         }
+//         current->next = article;
 
-    fileUploadFunc(list);
+//     }
+//     if (!isFile){
+//         cout << BLACK GREENB "\tAgregado con exito" NC << endl << endl;
+//     }
+
+//     fileUploadFunc(list);
     
-}
+// }
 
 // EDIT ARTICLE -------------------------------
 void editArticle(Article *&list, int long key, void (*fileUploadFunc)(Article *&) ){
