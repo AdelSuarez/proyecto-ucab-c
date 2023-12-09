@@ -16,4 +16,8 @@
 #define BLUEB "\e[44m"
 #define CYANB "\e[46m"
 #define PURPLEB "\e[45m"
+#define WHITEB "\e[0;107m"
+
+
+
 

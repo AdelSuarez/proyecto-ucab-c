@@ -1,26 +1,11 @@
-#include<iostream>
-#include<string>
-#include<iomanip>   
-#include<conio.h>
+#include <iostream>
+#include <string>
+#include <iomanip>   
+#include <conio.h>
 #include <functional>
-#include"validation.h"
-#include"../settings/style.h"
+// #include "validation.h"
+#include "../settings/style.h"
 using namespace std;
-
-
-// // SEARCH ARTICLE ------------------------
-// bool search(Article *list , int long key ){
-//     Article *current = list;
-//     bool found = false;
-
-//     while(current != NULL && !found) {
-//         if(current->key == key) {
-//             found = true;
-//         }
-//         current = current->next;
-//     }
-//     return found;
-// }
 
 
 // FIND ARTICLE (SEARCH) ---------------------------------------------------
@@ -38,7 +23,7 @@ Article* findArticle(Article *&list, int key, Article *&previous) {
 
 
 // CREATE ARTICLE -----------------------------------------------
-Article* creatArticle(long int key, string code, string name, float price, long int stock){
+Article* createArticle(long int key, string code, string name, float price, long int stock){
     Article *article = new Article();
     article->key = key;
     article->code = code;
@@ -64,9 +49,7 @@ void addArticle(Article *&list, Article *article, bool isFile, void (*fileUpload
 
     }
     if (!isFile){
-        cout << GREEN "\tAgregado con exito" NC << endl << endl;
-        cout << "Presiona cualquier boton para continuar ";
-        _getch();
+        cout << BLACK GREENB "\tAgregado con exito" NC << endl << endl;
     }
 
     fileUploadFunc(list);
@@ -74,7 +57,7 @@ void addArticle(Article *&list, Article *article, bool isFile, void (*fileUpload
 }
 
 // EDIT ARTICLE -------------------------------
-void editArticle(Article *&list, int long key,void (*fileUploadFunc)(Article *&) ){
+void editArticle(Article *&list, int long key, void (*fileUploadFunc)(Article *&) ){
     bool isName = false, isCode = false, isPrice = false, isStock = false;
     int option;
     long int newStock;
@@ -207,9 +190,9 @@ void searchArticle(Article *list){
         cout << "2- Precio" << endl;
         cout << "3- Stock" << endl;
         cout << "0- salir" << endl;
-        cout << "Introduce la opcion >> ";
 
-        cin >> option;
+
+        option = validateNumber("Introduce la opcion >> ");
         cin.ignore();
 
         switch (option){

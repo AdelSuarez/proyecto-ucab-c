@@ -9,12 +9,15 @@
 
 using namespace std;
 
+
+// List------------------
 Client *LClient = NULL;
 Article *LArticles = NULL;
 
+// variables----------------
 bool loadingArticles = true;
 long long int number, dni;
-long int keyArticles, stock, isKey;
+long int keyArticles, stock, isKey, counterCLient;
 float price;
 string name, address, code;
 int opt;
@@ -23,16 +26,19 @@ int opt;
 void menuClient();
 
 int main() {
-    readFile(LArticles, keyArticles);
-    createFile();
-    
+    readFileArticle(LArticles, keyArticles);
+    readFileClient(LClient, counterCLient);
+    createFile("ARTICULOS",DBArticles);
+    createFile("CLIENTES",DBClients);
+    createFile("VENDEDORES",DBSellers);
+
     do{
         fflush(stdin);
 
         system("cls");
         if (loadingArticles){
             cout << "CARGANDO BD..." << endl;  
-            cout << "ARTICULOS" << (keyArticles == 0? RED : GREEN) <<"["<< keyArticles<< "]" NC<< " | " << "VENDEDORES" << GREEN <<"["<< "0" << "]" NC<< " | " << "CLIENTES" << GREEN <<"["<< "0" << "]" NC<<endl << endl;
+            cout << "ARTICULOS" << (keyArticles == 0? RED : GREEN) <<"["<< keyArticles<< "]" NC<< " | " << "VENDEDORES" << (counterCLient == 0? RED : GREEN) <<"["<< counterCLient << "]" NC<< " | " << "CLIENTES" << GREEN <<"["<< "0" << "]" NC<<endl << endl;
             loadingArticles = false;
         }
         
@@ -55,8 +61,6 @@ int main() {
         cout << "0 - Salir " << endl;
         cout << "V0.1.2.8 " << endl << endl;
 
-        // cout << "Introduce la opcion >> ";
-        // cin >> opt;
         opt = validateNumber("Introduce la opcion >> ");
         cin.ignore();
 
@@ -75,7 +79,8 @@ int main() {
                 stock = validateNumber("Introduce el stock >> ");
                 keyArticles++;
 
-                addArticle(LArticles, creatArticle( keyArticles, code, name, price, stock), false,fileUpload);
+                addArticle(LArticles, createArticle( keyArticles, code, name, price, stock), false,fileUploadArticle);
+                _getch();
                 
                 break;
             case 2:
@@ -90,7 +95,7 @@ int main() {
 
 
                     if(current != NULL){
-                        editArticle(LArticles, isKey, fileUpload);
+                        editArticle(LArticles, isKey, fileUploadArticle);
                     } else{
                         cout << " Articulo no existe!"<< endl;
                         cout << "Presione un boton para continuar.";
@@ -110,7 +115,7 @@ int main() {
                 if (LArticles != NULL) {
                     isKey = validateNumber(" Introduce la clave >> ");
                     removeArticles(LArticles, isKey);
-                    fileUpload(LArticles);
+                    fileUploadArticle(LArticles);
                 } else {
                     cout << "No existen articulos. Presione un boton para continuar";
                     _getch();
@@ -154,8 +159,8 @@ void menuClient(){
         fflush(stdin);
 
         system("cls");
-        cout << "\t-GESTION DE CLIENTES-" << endl;
-        cout << "1 - Agreagar un cliente nuevo " << endl;
+        cout << BLUE "\t-GESTION DE CLIENTES-" NC<< endl;
+        cout << "1 - Agregar un cliente nuevo " << endl;
         cout << "2 - Editar cliente " << endl;
         cout << "3 - Buscar cliente " << endl;
         cout << "4 - Eliminar cliente " << endl;
@@ -169,12 +174,13 @@ void menuClient(){
         
         switch (opt){
             case 1:
+
+                // ADD CLIENT 
                 system("cls");
                 fflush(stdin);
-                
-                cout << "\t-Agregar nuevo cliente-" << endl << endl;
-                cout << "DNI del cliente: ";
-                cin >> dni;
+                cout << BLUE "\t-AGREGAR NUEVO CLIENTE-" NC << endl;
+
+                dni = validateNumber("DNI del cliente >> ");
                 cin.ignore();
 
                 fflush(stdin);
@@ -186,52 +192,49 @@ void menuClient(){
                 getline(cin, address);
 
                 fflush(stdin);
-                cout << "Numero telefonico del cliente: ";
-                cin >> number; 
+                number = validateNumber("Numero telefonico del cliente: ");
                 cin.ignore();
-
-                cout << name << " " << address << " " << number << " " << dni<< endl;
-                addLClient(LClient, dni, name,  address, number);
+                
+                addClient(LClient, createClient(dni, name,  address, number),false, fileUploadCLient);
                 _getch();
 
                 break;
             case 2:
                 system("cls");
-                cout << "\t-Editar cliente-" << endl;
-                cout << "DNI del cliente: ";
-                cin >> dni;
-                cin.ignore();
+                if (LClient != NULL){
+                    cout <<BLUE "\t-EDITAR CLIENTE-" NC<< endl;
+                    cout << "DNI del cliente: ";
+                    cin >> dni;
+                    cin.ignore();
 
-                editClient(LClient, dni);
+                    editClient(LClient, dni, fileUploadCLient);
+
+                } else {
+                    cout << REDB "Lista vacia." NC;
+                    _getch(); 
+                }
                 break; 
 
             case 3:
                 system("cls");
-                cout << "\t-Buscar cliente-" << endl;
+                if (LClient != NULL) {
 
-                fflush(stdin);
-                cout << "DNI del cliente: ";
-                cin >> dni;
+                    searchClient(LClient);
 
-                
-                fflush(stdin);
-                cout << "nombre del cliente: ";
-                getline(cin, name);
-
-                // cout << "Direccion del cliente: ";
-                // getline(cin, address);
-
-
-                searchClient(LClient, dni, name);
+                } else {
+                    cout << REDB "Lista vacia." NC;
+                    _getch(); 
+                }
                 break; 
                 
 
             case 4:
-                cout << "\t-Eliminar cliente" << endl;
-                cout << "Nombre del cliente: ";
-                getline(cin, name);
-
-                removeClient(LClient, name);
+                system("cls");
+                cout <<BLUE "\t-ELIMINAR CLIENTE-" NC<< endl;
+                fflush(stdin);
+                dni = validateNumber("DNI del cliente >> ");
+                removeClient(LClient, dni);
+                fileUploadCLient(LClient);
                 break;
 
             case 5:

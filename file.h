@@ -3,25 +3,30 @@
 #include<conio.h>
 #include<fstream>
 #include <iomanip>
+#include <sstream>
 using namespace std;
 
-const string DB = "db/Articles.txt" ;
+const string DBArticles = "db/Articles.txt" ;
+const string DBClients = "db/Clients.txt" ;
+const string DBSellers = "db/Sellers.txt" ;
 
-void fileUpload(Article *&);
 
-void createFile(){
+
+void fileUploadArticle(Article *&);
+
+void createFile(string title, string db){
     ofstream file;
-    ifstream infile(DB.c_str());
+    ifstream infile(db.c_str());
     if (infile.good()){
         infile.close();
     } else {
 
-        file.open(DB.c_str(), ios::out);
+        file.open(db.c_str(), ios::out);
 
         if (file.fail()){
             cout << "No se puede abrir el archivo";
         } else {
-            file<<"ARTICULOS"<<endl;
+            file<<title<<endl;
             file.close();
 
         }
@@ -29,24 +34,9 @@ void createFile(){
 
 }
 
-// void writeFile(long int key, string code, string name, float price, int stock){
-//     ofstream file;
-//     file.open(DB.c_str(), ios::app);
 
-//     if (file.fail()){
-//         cout << "No se puede abrir el archivo";
-//     } else {
-//         file << code << endl;
-//         file << name << endl;
-//         file << std::fixed << std::setprecision(2) << price << endl;  // Aquí es donde se escribe el precio con precisión decimal
-//         file << stock << endl;
-//     }
-//     file.close();   
-// }
-
-
-
-void readFile(Article *&list, long int &currentKey){
+// READ FILE ARTICLE ----------------------------------------
+void readFileArticle(Article *&list, long int &currentKey){
 
     ifstream file;
     
@@ -56,7 +46,7 @@ void readFile(Article *&list, long int &currentKey){
     float price;
     list = NULL;
 
-    file.open(DB.c_str(), ios:: in);
+    file.open(DBArticles.c_str(), ios:: in);
 
     if (file.fail()){
         cout << "No se puede abrir el archivo";
@@ -76,7 +66,7 @@ void readFile(Article *&list, long int &currentKey){
                 stock = stoi(text);
                 count = -1;
                 key++;
-                addArticle(list, creatArticle(key, code, name, price, stock), true, fileUpload);
+                addArticle(list, createArticle(key, code, name, price, stock), true, fileUploadArticle);
             }
             count++;
 
@@ -85,10 +75,13 @@ void readFile(Article *&list, long int &currentKey){
     currentKey = key;
     file.close();
 }
-// file upload
-void fileUpload(Article *&list){
+
+
+
+// FILE UPLOAD ARTICLE -----------------
+void fileUploadArticle(Article *&list){
     ofstream file;
-    file.open(DB.c_str(), ios::out);  // Abre el archivo en modo de escritura, esto borrará el contenido existente y carga toda la lista de nuevo
+    file.open(DBArticles.c_str(), ios::out);  // Abre el archivo en modo de escritura, esto borrará el contenido existente y carga toda la lista de nuevo
 
     if (file.fail()){
         cout << "No se puede abrir el archivo";
@@ -104,6 +97,67 @@ void fileUpload(Article *&list){
         current = current->next;
     }
 
+    file.close();
+}
+
+// FILE UPLOAD CLIENT ----------------
+void fileUploadCLient(Client *&list){
+    ofstream file;
+    file.open(DBClients.c_str(), ios::out);  // Abre el archivo en modo de escritura, esto borrará el contenido existente y carga toda la lista de nuevo
+
+    if (file.fail()){
+        cout << "No se puede abrir el archivo";
+        return;
+    }
+    Client* current = list;
+    file << "CLIENTES" << endl;
+    while(current != NULL){
+        file << current->client.dni << "-";
+        file << current->client.name << "-";
+        file << current->address << "-";
+        file << current->number << endl;
+        current = current->next;
+    }
+
+    file.close();
+}
+
+// READ FILE CLIENT --------------------------------------
+void readFileClient(Client *&list, long int &countClient){
+    ifstream file;
+    string text, name, address, number;
+    long long int dni = 0;
+    int count = 0;
+    list = NULL;
+
+    file.open(DBClients.c_str(), ios:: in);
+
+    if (file.fail()){
+        cout << "No se puede abrir el archivo";
+        return;
+    }
+
+    while(!file.eof()){
+        getline(file, text);
+        if(text != "CLIENTES"){
+            stringstream ss(text);
+            while(getline(ss, text, '-')) {
+                if (count == 0){
+                    dni = stoll(text);
+                    countClient++;
+                } else if (count == 1) {
+                    name = text;
+                } else if (count == 2) {
+                    address = text;
+                } else if (count == 3){
+                    number = text;
+                    count = -1;
+                    addClient(list, createClient(dni, name, address, stoll(number)), true, fileUploadCLient);
+                }
+                count++;
+            }
+        }
+    }
     file.close();
 }
 
