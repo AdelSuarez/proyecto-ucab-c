@@ -1,12 +1,5 @@
-// #include <iostream>
-// #include <string>
-// #include <iomanip>   
-// #include <conio.h>
 #include <functional>
-// #include "validation.h"
-// #include "../settings/style.h"
 using namespace std;
-
 
 // FIND ARTICLE (SEARCH) ---------------------------------------------------
 Article* findArticle(Article *&list, int key, Article *&previous) {
@@ -33,28 +26,6 @@ Article* createArticle(long int key, string code, string name, float price, long
     article->next = NULL;
     return article;
 }
-
-
-// void addArticle(Article *&list, Article *article, bool isFile, void (*fileUploadFunc)(Article *&)){
-
-//     if (list == NULL){
-//         list = article;
-
-//     } else {
-//         Article *current = list;
-//         while(current->next != NULL){
-//             current = current->next;
-//         }
-//         current->next = article;
-
-//     }
-//     if (!isFile){
-//         cout << BLACK GREENB "\tAgregado con exito" NC << endl << endl;
-//     }
-
-//     fileUploadFunc(list);
-    
-// }
 
 // EDIT ARTICLE -------------------------------
 void editArticle(Article *&list, int long key, void (*fileUploadFunc)(Article *&) ){
@@ -180,6 +151,7 @@ void searchArticle(Article *list){
     float price;
     int option, count;
     long int stock;
+    Article* listComplete = list;
     Article* current = list;
     
     do{
@@ -249,7 +221,7 @@ void searchArticle(Article *list){
                 _getch();
                 break;
         } 
-
+        current = listComplete;
 
     } while(option != 0);
 }
@@ -263,7 +235,6 @@ void viewArticle(Article *article){
 
 
 // REMOVE ARTICLE ------------------------------
-void remove( Article *&,Article *, Article *,  int long);
 void removeArticles(Article *&list, int long key){
     string opt;
     Article *previous = NULL;
@@ -275,36 +246,18 @@ void removeArticles(Article *&list, int long key){
         cout << "Desea eliminar el articulo (s/n) >> ";
         getline(cin, opt);
         if ((opt == "s") ||(opt == "S")){
-            remove(list,current, previous,  key);
+            removeNode(list,current, previous);
         } else {
             return;
         }
 
     } else {
-        cout << REDB " El articulo no existe!" NC << endl;
+        cout << REDB " El articulo no existe!" NC;
         _getch();
     }
 
 }
 
-
-void remove(Article *&list, Article *current, Article *previous, int long key) {
-
-    if (current == NULL) {
-        cout << BLACK REDB " Articulo no encontrado!" NC;
-        _getch();
-        return;
-    }
-
-    if (previous == NULL) { // El artículo a eliminar es el primer elemento
-        list = current->next;
-    } else { // El artículo a eliminar está en medio o al final de la lista
-        previous->next = current->next;
-    }
-    delete current;
-    cout << BLACK GREENB " Articulo borrado con exito!" NC;
-    _getch();
-}
 
 
 

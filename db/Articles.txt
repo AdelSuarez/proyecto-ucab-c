@@ -7,10 +7,6 @@ G001
 YARIS 2022
 75000.00
 1
-asd
-as
-1.00
-1
 JK01
 Perro de oro
 1500.00

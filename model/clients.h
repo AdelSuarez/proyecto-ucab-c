@@ -1,11 +1,3 @@
-// #include <iostream>
-// #include <string>
-// #include <iomanip>
-// #include <conio.h>
-// #include "struct.h"
-// #include "validation.h"
-// #include "../settings/style.h"
-
 using namespace std;
 
 
@@ -77,7 +69,6 @@ void showClients(Client *list) {
     _getch();
 }
 
-void remove(Client *&, Client *, Client *, long long int ); 
 void removeClient(Client *&list, long long int dni){
     string option;
     Client *previous = NULL;
@@ -89,30 +80,16 @@ void removeClient(Client *&list, long long int dni){
         cout << "Desea eliminar el cliente (s/n) >> ";
         getline(cin, option);
         if ((option == "s") ||(option == "S")){
-            remove(list,current, previous,  dni);
+            removeNode(list,current, previous);
         } else {
             return;
         }
 
-    }
-
-}
-
-void remove(Client *&list, Client *current, Client *previous, long long int dni) {
-
-    if (current == NULL) {
-        cout << BLACK REDB " Articulo no encontrado!" NC;
+    } else {
+        cout << REDB " El articulo no existe!" NC;
         _getch();
-        return;
     }
-    if (previous == NULL) { // El artículo a eliminar es el primer elemento
-        list = current->next;
-    } else { // El artículo a eliminar está en medio o al final de la lista
-        previous->next = current->next;
-    }
-    delete current;
-    cout << BLACK GREENB " Articulo borrado con exito!" NC;
-    _getch();
+
 }
 
 
@@ -123,87 +100,93 @@ void editClient(Client *&list, long long int dni, void (*fileUploadFunc)(Client 
     int option;
     Client *previous = NULL;
     Client *current = findCLient(list, dni, previous);
+    if (current != NULL){
 
-    do {
-        system("cls");
-        fflush(stdin);
-        cout << BLUE "\t-OPCIONES-" NC<< endl;
-        cout << left << setw(1) << "1-" << setw(12) << "Nombre"<< "| " << setw(15) << current->client.name << (isName ? GREEN "*" NC: "") << endl;
-        cout << left << setw(1) << "2-" << setw(12) << "DNI"<< "| " << setw(15) << current->client.dni << (isDNI ? GREEN "*" NC: "") << endl;
-        cout << left << setw(1) << "3-" << setw(12) << "Direccion"<< "| " << setw(15) << current->address << (isAddress ? GREEN "*" NC: "") << endl;
-        cout << left << setw(1) << "4-" << setw(12) << "Numero"<< "| " << setw(15) << current->number << (isNumber ? GREEN "*" NC: "") << endl;
-        cout << "0- Salir" << endl;
+        do {
+            system("cls");
+            fflush(stdin);
+            cout << BLUE "\t-OPCIONES-" NC<< endl;
+            cout << left << setw(1) << "1-" << setw(12) << "Nombre"<< "| " << setw(15) << current->client.name << (isName ? GREEN "*" NC: "") << endl;
+            cout << left << setw(1) << "2-" << setw(12) << "DNI"<< "| " << setw(15) << current->client.dni << (isDNI ? GREEN "*" NC: "") << endl;
+            cout << left << setw(1) << "3-" << setw(12) << "Direccion"<< "| " << setw(15) << current->address << (isAddress ? GREEN "*" NC: "") << endl;
+            cout << left << setw(1) << "4-" << setw(12) << "Numero"<< "| " << setw(15) << current->number << (isNumber ? GREEN "*" NC: "") << endl;
+            cout << "0- Salir" << endl;
 
-        option = validateNumber("Introduce la opcion >> ");
-        cin.ignore();
+            option = validateNumber("Introduce la opcion >> ");
+            cin.ignore();
 
-        switch (option)
-        {
-        case 1:
-            cout << endl;
-            cout << "+\tEditar nombre" << endl;
-            cout << "| Nuevo nombre: ";
-            getline(cin, newName);
-            current->client.name = newName;
-            cout << "|" <<endl;
-            cout << "+ "<<GREEN "Nombre editado con exito!" NC;
-            isName = true;
-            fileUploadFunc(list);
-            _getch();
-            break;
-            break;
+            switch (option){
+            case 1:
+                cout << endl;
+                cout << "+\tEditar nombre" << endl;
+                cout << "| Nuevo nombre: ";
+                getline(cin, newName);
+                current->client.name = newName;
+                cout << "|" <<endl;
+                cout << "+ "<<GREEN "Nombre editado con exito!" NC;
+                isName = true;
+                fileUploadFunc(list);
+                _getch();
+                break;
+                break;
 
-        case 2:
-            cout << endl;
-            cout << "+\tEditar DNI" << endl;
-            newDNI = validateNumber("| Nuevo DNI >> ");
-            current->client.dni = newDNI;
-            cout << "|" <<endl;
-            cout << "+ "<<GREEN "DNI editado con exito!" NC;
-            isDNI = true;
-            fileUploadFunc(list);
-            _getch();
-            break;
+            case 2:
+                cout << endl;
+                cout << "+\tEditar DNI" << endl;
+                newDNI = validateNumber("| Nuevo DNI >> ");
+                current->client.dni = newDNI;
+                cout << "|" <<endl;
+                cout << "+ "<<GREEN "DNI editado con exito!" NC;
+                isDNI = true;
+                fileUploadFunc(list);
+                _getch();
+                break;
 
-        case 3:
-            cout << endl;
-            cout << "+\tEditar direccion" << endl;
-            cout << "| Nueva direccion: ";
-            getline(cin, newAddress);
-            current->address = newAddress;
-            cout << "|" <<endl;
-            cout << "+ "<<GREEN "Direccion editada con exito!" NC;
-            isAddress = true;
-            fileUploadFunc(list);
-            _getch();
-            break;
-        case 4:
-            cout << endl;
-            cout << "+\tEditar numero" << endl;
-            newNumber = validateNumber("| Nuevo numero >> ");
-            current->number = newNumber;
-            cout << "|" <<endl;
-            cout << "+ "<<GREEN "Stock editado con exito!" NC;
-            isNumber = true;
-            fileUploadFunc(list);
-            _getch();
-            break;
+            case 3:
+                cout << endl;
+                cout << "+\tEditar direccion" << endl;
+                cout << "| Nueva direccion: ";
+                getline(cin, newAddress);
+                current->address = newAddress;
+                cout << "|" <<endl;
+                cout << "+ "<<GREEN "Direccion editada con exito!" NC;
+                isAddress = true;
+                fileUploadFunc(list);
+                _getch();
+                break;
+            case 4:
+                cout << endl;
+                cout << "+\tEditar numero" << endl;
+                newNumber = validateNumber("| Nuevo numero >> ");
+                current->number = newNumber;
+                cout << "|" <<endl;
+                cout << "+ "<<GREEN "Stock editado con exito!" NC;
+                isNumber = true;
+                fileUploadFunc(list);
+                _getch();
+                break;
 
-        case 0:
-            break;
-        
-        default:
-            cout << REDB "La opcion no existe" NC;
-            _getch();
-        }
+            case 0:
+                break;
+            
+            default:
+                cout << REDB "La opcion no existe" NC;
+                _getch();
+                break;
+            }
 
-    } while(option != 0);
+        } while(option != 0);
+    } else {
+        cout << REDB " Articulo no existe!" NC;
+        _getch();
+    }
 }
 
 void viewClient(Client *);
 void searchClient(Client* list){
+    Client* listComplete = list;
     Client* current = list;
-    int option, count ;
+    int option, count;
     string name, address;
     long long int dni;
     do {
@@ -220,8 +203,7 @@ void searchClient(Client* list){
         option = validateNumber("Introduce la opcion >> ");
         cin.ignore();
 
-        switch (option)
-        {
+        switch (option){
         case 1:
             system("cls");
             cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
@@ -277,6 +259,7 @@ void searchClient(Client* list){
             _getch();
             break;
         }
+        current = listComplete;
     } while(option !=0);
 }
 

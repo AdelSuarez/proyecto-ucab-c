@@ -3,11 +3,11 @@
 #include <string>
 #include <limits>
 #include "model/validation.h"
+#include "model/node.h"
 #include "model/struct.h"
 #include "model/seller.h"
 #include "model/clients.h"
 #include "model/articles.h"
-#include "model/node.h"
 #include "file.h"
 #include <conio.h>
 #include "settings/style.h"
@@ -309,6 +309,29 @@ void menuSeller(){
 
             break;
         
+        case 2:
+            system("cls");
+            fflush(stdin);
+            cout << BLUE "\t-EDITAR VENDEDOR-" NC << endl;
+
+            dni = validateNumber("DNI del vendedor >> ");
+            cin.ignore();
+            editSeller(LSeller, dni, fileUploadSeller);
+            break;
+
+        case 3:
+            searchSeller(LSeller);
+            break;
+
+
+        case 4:
+            system("cls");
+            cout <<BLUE "\t-ELIMINAR VENDEDOR-" NC<< endl;
+            fflush(stdin);
+            dni = validateNumber("DNI del vendedor >> ");
+            removeSeller(LSeller, dni);
+            fileUploadSeller(LSeller);
+            break;
         case 5:
             showSellers(LSeller);
             break;

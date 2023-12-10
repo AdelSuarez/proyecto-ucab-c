@@ -1,7 +1,3 @@
-// #include "../settings/style.h"
-// #include <iostream>
-// #include <string>
-
 
 // ADD NODE ------------------------------------------------
 template <typename T>
@@ -25,3 +21,23 @@ void addNode(T *&list, T *node, bool isFile, void (*fileUploadFunc)(T *&)){
     fileUploadFunc(list);
     
 }
+
+template <typename N>
+void removeNode(N *&list, N *current, N *previous) {
+
+    if (current == NULL) {
+        cout << BLACK REDB " Articulo no encontrado!" NC;
+        _getch();
+        return;
+    }
+    if (previous == NULL) { // El artículo a eliminar es el primer elemento
+        list = current->next;
+    } else { // El artículo a eliminar está en medio o al final de la lista
+        previous->next = current->next;
+    }
+    delete current;
+    cout << BLACK GREENB " Articulo borrado con exito!" NC;
+    _getch();
+}
+
+

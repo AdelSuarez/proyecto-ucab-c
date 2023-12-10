@@ -210,21 +210,20 @@ void readFileSeller(Seller *&list, long int &countSeller){
                     name = text;
                 } else if (count == 2) {
                     stringstream ss(text);
-                    while(getline(ss, text, '/')){
-                        if (count == 2){
-                            day=stoi(text);
-
-                        } else if (count == 3) {
-                            month=stoi(text);
-
-                        } else if (count == 4){
-                            year=stoi(text);
+                    string datePart;
+                    int dateCount = 0;
+                    while(getline(ss, datePart, '/')){
+                        if (dateCount == 0){
+                            day = stoi(datePart);
+                        } else if (dateCount == 1) {
+                            month = stoi(datePart);
+                        } else if (dateCount == 2){
+                            year = stoi(datePart);
                             break;
                         }
-                        count++;
-
+                        dateCount++;
                     }
-                } else if (count == 4){
+                } else if (count == 3){
                     number = text;
                     count = -1;
                     addNode(list, createSeller(dni, name, day, month, year, stoll(number)), true, fileUploadSeller);
