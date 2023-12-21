@@ -32,8 +32,6 @@ void editArticle(Article *&list, int long key, void (*fileUploadFunc)(Article *&
     bool isName = false, isCode = false, isPrice = false, isStock = false;
     int option;
     long int newStock;
-    float newPrice;
-    string newName, newCode;
 
     Article *previous = NULL;
     Article *current = findArticle(list, key, previous);
@@ -50,15 +48,12 @@ void editArticle(Article *&list, int long key, void (*fileUploadFunc)(Article *&
         cout << "0- Salir" << endl;
 
         option = validateNumber("Introduce la opcion >> ");
-        cin.ignore();
 
         switch (option){
             case 1:
                 cout << endl;
                 cout << "+\tEditar nombre" << endl;
-                cout << "| Nuevo nombre: ";
-                getline(cin, newName);
-                current->name = newName;
+                current->name = isVoid("| Nuevo nombre: ");
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "Nombre editado con exito!" NC;
                 isName = true;
@@ -70,11 +65,8 @@ void editArticle(Article *&list, int long key, void (*fileUploadFunc)(Article *&
             case 2:
                 cout << endl;
                 cout << "+\tEditar codigo" << endl;
-                cout << "| Nuevo codigo >> ";
-                getline(cin, newCode);
-                current->code = newCode;
+                current->code = isVoid("| Nuevo codigo >> ");
                 cout << "|" <<endl;
-
                 cout << "+ "<<GREEN "Codigo editado con exito!" NC;
                 isCode = true;
                 fileUploadFunc(list);
@@ -85,8 +77,7 @@ void editArticle(Article *&list, int long key, void (*fileUploadFunc)(Article *&
             case 3:
                 cout << endl;
                 cout << "+\tEditar price" << endl;
-                newPrice = validateNumber("| Nuevo precio >> ");
-                current->price = newPrice;
+                current->price = validateNumber("| Nuevo precio >> ");
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "Precio editado con exito!" NC;
                 isPrice = true;
@@ -97,7 +88,9 @@ void editArticle(Article *&list, int long key, void (*fileUploadFunc)(Article *&
             case 4:
                 cout << endl;
                 cout << "+\tEditar stock" << endl;
-                newStock = validateNumber("| Nuevo stock >> ");
+                do {
+                    newStock = validateNumber("| Nuevo stock >> ");
+                } while (newStock < 1);
                 current->stock = newStock;
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "Stock editado con exito!" NC;
@@ -141,9 +134,6 @@ void showArticles(Article *&list) {
     _getch();
 }
 
-
-
-
 // SEARCH ARTICLE -----------------
 void viewArticle(Article *);
 void searchArticle(Article *list){
@@ -171,8 +161,7 @@ void searchArticle(Article *list){
             case 1:
                 system("cls");
                 cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
-                cout << "Introduce el nombre >> ";
-                getline(cin, name);
+                name = isVoid("Introduce el nombre >> ");
                 while(current != NULL) {
                     if(current->name == name ) {
                         viewArticle(current);
@@ -243,9 +232,8 @@ void removeArticles(Article *&list, int long key){
     if(current != NULL){
         fflush(stdin);
         cout << "Articulo: " << current->name << endl;
-        cout << "Desea eliminar el articulo (s/n) >> ";
-        getline(cin, opt);
-        if ((opt == "s") ||(opt == "S")){
+        opt = isVoid("Desea eliminar el articulo (s/n) >> ");
+        if ((opt == "s") || (opt == "S")){
             removeNode(list,current, previous);
         } else {
             return;
@@ -257,32 +245,3 @@ void removeArticles(Article *&list, int long key){
     }
 
 }
-
-
-
-
-// void removeStock(Article *&list, string name){
-//     long int stockToRemove;
-//     Article *current = list;
-
-//         // Buscar el nodo con el DNI proporcionado
-//     while(current != NULL && current->name != name){
-//         current = current->next;
-//     }
-
-//     // Si el nodo fue encontrado, modificar sus valores
-//     if (current != NULL){
-//         // TODO la funcion no se a probado con este ciclo
-        
-//         do {
-//             cout << "Introduce la cantidad de productos a eliminar: ";
-//             cin >> stockToRemove;
-
-//         } while(stockToRemove >= current->stock);
-
-        
-//         current->stock = current->stock - stockToRemove;
-//         cout << "Modificado con exito";
-//     }
-// }
-

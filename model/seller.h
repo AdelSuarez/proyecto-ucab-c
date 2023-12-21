@@ -22,7 +22,6 @@ Seller* createSeller(long long int dni, string name, int day, int month, int yea
     seller->admissionDay.month = month;
     seller->admissionDay.year = year;
     seller->commission = comission;
-
     seller->next = NULL;
     return seller;
 }
@@ -51,7 +50,6 @@ void showSellers(Seller *list) {
 void editSeller(Seller *&list, long long int dni, void (*fileUploadFunc)(Seller *&)){
     int option;
     bool isName = false, isDNI = false, isComission = false, isDay = false, isMonth = false, isYear = false;
-    string newName;
     long long int newDNI;
     Seller *previous = NULL;
     Seller *current = findSeller(list, dni, previous);
@@ -73,16 +71,13 @@ void editSeller(Seller *&list, long long int dni, void (*fileUploadFunc)(Seller 
             cout << "0- Salir" << endl;
 
             option = validateNumber("Introduce la opcion >> ");
-            cin.ignore();
 
 
             switch (option){
             case 1:
                 cout << endl;
                 cout << "+\tEditar nombre" << endl;
-                cout << "| Nuevo nombre: ";
-                getline(cin, newName);
-                current->seller.name = newName;
+                current->seller.name = isVoid("| Nuevo nombre: ");
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "Nombre editado con exito!" NC;
                 isName = true;
@@ -177,14 +172,12 @@ void searchSeller(Seller* list){
         cout << "Introduce la opcion >> ";
 
         option = validateNumber("Introduce la opcion >> ");
-        cin.ignore();
 
         switch (option){
         case 1:
             system("cls");
             cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
-            cout << "Introduce el nombre >> ";
-            getline(cin, name);
+            name = isVoid("Introduce el nombre >> ");
             while(current != NULL) {
                 if(current->seller.name == name ) {
                     viewSeller(current);
@@ -256,8 +249,7 @@ void removeSeller(Seller *&list, long long int dni){
     if (current != NULL){
         fflush(stdin);
         cout << "Vendedor: " << current->seller.name << endl;
-        cout << "Desea eliminar el vendedor (s/n) >> ";
-        getline(cin, option);
+        option = isVoid("Desea eliminar el vendedor (s/n) >> ");
         if ((option == "s") ||(option == "S")){
             removeNode(list,current, previous);
         } else {

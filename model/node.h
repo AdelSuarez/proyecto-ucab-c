@@ -15,9 +15,8 @@ void addNode(T *&list, T *node, bool isFile, void (*fileUploadFunc)(T *&)){
 
     }
     if (!isFile){
-        cout << BLACK GREENB "\tAgregado con exito" NC << endl << endl;
+        cout << BLACK GREENB "\tAgregado con exito" NC;
     }
-
     fileUploadFunc(list);
     
 }

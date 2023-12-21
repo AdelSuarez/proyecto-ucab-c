@@ -1,7 +1,7 @@
 // #include <iostream>
 // #include<string>
 // #include<conio.h>
-#include<fstream>
+#include <fstream>
 #include <iomanip>
 #include <sstream>
 using namespace std;
@@ -25,6 +25,7 @@ void createFile(string title, string db){
 
         if (file.fail()){
             cout << "No se puede abrir el archivo";
+            _getch();
         } else {
             file<<title<<endl;
             file.close();
@@ -35,20 +36,21 @@ void createFile(string title, string db){
 }
 
 // READ FILE ARTICLE ----------------------------------------
-void readFileArticle(Article *&list, long int &currentKey){
+void readFileArticle(Article *&list, long int &currentKey, string db, bool upload){
 
     ifstream file;
     
     string text, code, name;
-    long int key = 0, stock;
+    long int stock;
     int count = 0;
     float price;
-    list = NULL;
+    // list = NULL;
 
-    file.open(DBArticles.c_str(), ios:: in);
+    file.open(db.c_str(), ios:: in);
 
     if (file.fail()){
         cout << "No se puede abrir el archivo";
+        _getch();
         return;
     }
 
@@ -64,17 +66,19 @@ void readFileArticle(Article *&list, long int &currentKey){
             } else if (count == 3){
                 stock = stoi(text);
                 count = -1;
-                key++;
-                addNode(list, createArticle(key, code, name, price, stock), true, fileUploadArticle);
+                currentKey++;
+                addNode(list, createArticle(currentKey, code, name, price, stock), true, fileUploadArticle);
             }
             count++;
 
         } 
     }
-    currentKey = key;
     file.close();
+    if (upload){
+        cout << BLACK GREENB  "Archivo cargado con exito." NC;
+        _getch();
+    }
 }
-
 
 
 // FILE UPLOAD ARTICLE -----------------

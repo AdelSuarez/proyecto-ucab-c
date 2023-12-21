@@ -24,14 +24,14 @@ bool loadingArticles = true;
 long long int number, dni;
 long int keyArticles, stock, isKey, counterCLient, counterSeller;
 float price;
-string name, address, code;
+string name, address, code , nameDB;
 int opt;
 
 void menuSeller();
 void menuClient();
 
 int main() {
-    readFileArticle(LArticles, keyArticles);
+    readFileArticle(LArticles, keyArticles, DBArticles, false);
     readFileClient(LClient, counterCLient);
     readFileSeller(LSeller, counterSeller);
 
@@ -69,7 +69,7 @@ int main() {
         cout << "V0.1.2.8 " << endl << endl;
 
         opt = validateNumber("Introduce la opcion >> ");
-        cin.ignore();
+        // cin.ignore();
 
         
         switch (opt){
@@ -77,11 +77,9 @@ int main() {
                 // add article
                 system("cls");
                 cout << BLUE "\t-INGRESAR NUEVO ARTICULO-" NC<< endl;
-                cout << "Introduce el codigo >> ";
-                getline(cin, code);
-                cout << "Introduce el nombre >> ";
-                getline(cin, name);
 
+                code = isVoid("Introduce el codigo >> ");
+                name = isVoid("Introduce el nombre >> ");
                 price = validateNumber("Introduce el precio >> ");
                 stock = validateNumber("Introduce el stock >> ");
                 keyArticles++;
@@ -141,6 +139,13 @@ int main() {
                     _getch();
                 }
                 break;
+            case 5:
+                system("cls");
+                cout << BLUE "\t-INGRESO DE STOCK- " NC<< endl; 
+                nameDB = isVoid("Introduce el nombre del archivo >> ");
+                readFileArticle(LArticles, keyArticles, "db/"+nameDB+".txt", true);
+                break;
+
             case 6:
                 showArticles(LArticles);
                 break;
@@ -179,7 +184,6 @@ void menuClient(){
         cout << "0 - Salir " << endl << endl;
 
         opt = validateNumber("Introduce la opcion >> ");
-        cin.ignore();
 
         
         switch (opt){
@@ -191,20 +195,12 @@ void menuClient(){
                 cout << BLUE "\t-AGREGAR NUEVO CLIENTE-" NC << endl;
 
                 dni = validateNumber("DNI del cliente >> ");
-                cin.ignore();
-
                 fflush(stdin);
-                cout << "Nombre del cliente: ";
-                getline(cin, name);
-
+                name = isVoid("Nombre del cliente >> ");
                 fflush(stdin);
-                cout << "Direccion del cliente: ";
-                getline(cin, address);
-
+                address = isVoid("Direccion del cliente >> ");
                 fflush(stdin);
-                number = validateNumber("Numero telefonico del cliente: ");
-                cin.ignore();
-                
+                number = validateNumber("Numero telefonico del cliente >> ");                
                 addClient(LClient, createClient(dni, name,  address, number),false, fileUploadCLient);
                 _getch();
 
@@ -213,9 +209,7 @@ void menuClient(){
                 system("cls");
                 if (LClient != NULL){
                     cout <<BLUE "\t-EDITAR CLIENTE-" NC<< endl;
-                    cout << "DNI del cliente: ";
-                    cin >> dni;
-                    cin.ignore();
+                    dni = validateNumber("DNI del cliente: ");
 
                     editClient(LClient, dni, fileUploadCLient);
 
@@ -338,6 +332,8 @@ void menuSeller(){
 
 
         default:
+            cout << " " << REDB "Opcion no valida" NC;
+            _getch();
             break;
         }
 

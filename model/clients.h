@@ -22,7 +22,6 @@ Client* createClient(long long int dni, string name, string address, long long i
     client->client.name = name;
     client->address = address;
     client->number = number;
-
     client->next = NULL;
     return client;
 }
@@ -77,14 +76,12 @@ void removeClient(Client *&list, long long int dni){
     if (current != NULL){
         fflush(stdin);
         cout << "Cliente: " << current->client.name << endl;
-        cout << "Desea eliminar el cliente (s/n) >> ";
-        getline(cin, option);
+        option = isVoid("Desea eliminar el cliente (s/n) >> ");
         if ((option == "s") ||(option == "S")){
             removeNode(list,current, previous);
         } else {
             return;
         }
-
     } else {
         cout << REDB " El articulo no existe!" NC;
         _getch();
@@ -95,7 +92,6 @@ void removeClient(Client *&list, long long int dni){
 
 void editClient(Client *&list, long long int dni, void (*fileUploadFunc)(Client *&)){
     bool isName = false, isDNI = false, isAddress = false, isNumber = false;
-    string newName, newAddress;
     long long int newDNI, newNumber;
     int option;
     Client *previous = NULL;
@@ -113,15 +109,12 @@ void editClient(Client *&list, long long int dni, void (*fileUploadFunc)(Client 
             cout << "0- Salir" << endl;
 
             option = validateNumber("Introduce la opcion >> ");
-            cin.ignore();
 
             switch (option){
             case 1:
                 cout << endl;
                 cout << "+\tEditar nombre" << endl;
-                cout << "| Nuevo nombre: ";
-                getline(cin, newName);
-                current->client.name = newName;
+                current->client.name = isVoid("| Nuevo nombre: ");
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "Nombre editado con exito!" NC;
                 isName = true;
@@ -145,9 +138,7 @@ void editClient(Client *&list, long long int dni, void (*fileUploadFunc)(Client 
             case 3:
                 cout << endl;
                 cout << "+\tEditar direccion" << endl;
-                cout << "| Nueva direccion: ";
-                getline(cin, newAddress);
-                current->address = newAddress;
+                current->address = isVoid("| Nueva direccion: ");
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "Direccion editada con exito!" NC;
                 isAddress = true;
@@ -201,14 +192,12 @@ void searchClient(Client* list){
 
 
         option = validateNumber("Introduce la opcion >> ");
-        cin.ignore();
 
         switch (option){
         case 1:
             system("cls");
             cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
-            cout << "Introduce el nombre >> ";
-            getline(cin, name);
+            name = isVoid("Introduce el nombre >> ");
             while(current != NULL) {
                 if(current->client.name == name ) {
                     viewClient(current);
@@ -238,8 +227,7 @@ void searchClient(Client* list){
         case 3:
             system("cls");
             cout << BLUE "\t BUSQUEDA POR DIRECCION" NC<< endl;
-            cout << "Introduce la direccion >> ";
-            getline(cin, address);
+            address = isVoid("Introduce la direccion >> ");
             while(current != NULL) {
                 if(current->address == address ) {
                     viewClient(current);
