@@ -1,6 +1,6 @@
-#include<iostream>
-#include"../settings/style.h"
-#include<conio.h>
+#include <iostream>
+#include "../settings/style.h"
+#include <conio.h>
 
 using namespace std;
 
@@ -21,8 +21,8 @@ string isVoid(string text){
 
 }
 
-float validateNumber(string text) {
-    float number;
+double validateNumber(string text) {
+    double number;
     string input;
 
     while (true) {
@@ -35,7 +35,7 @@ float validateNumber(string text) {
             continue;
         }
 
-        // Convierte la entrada a float
+        // Convierte la entrada a double
         stringstream ss(input);
         ss >> number;
 
@@ -44,7 +44,7 @@ float validateNumber(string text) {
         } else if (number < 0) {
             cout << REDB "Cantidad incorrecta, vuelve a intentarlo\n" NC;
         } else {
-            break; // Sal del bucle, la entrada es válida
+            break; //  la entrada es válida
         }
     }
     return number;

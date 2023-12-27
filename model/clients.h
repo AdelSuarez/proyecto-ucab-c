@@ -111,59 +111,58 @@ void editClient(Client *&list, long long int dni, void (*fileUploadFunc)(Client 
             option = validateNumber("Introduce la opcion >> ");
 
             switch (option){
-            case 1:
-                cout << endl;
-                cout << "+\tEditar nombre" << endl;
-                current->client.name = isVoid("| Nuevo nombre: ");
-                cout << "|" <<endl;
-                cout << "+ "<<GREEN "Nombre editado con exito!" NC;
-                isName = true;
-                fileUploadFunc(list);
-                _getch();
-                break;
-                break;
+                case 1:
+                    cout << endl;
+                    cout << "+\tEditar nombre" << endl;
+                    current->client.name = isVoid("| Nuevo nombre: ");
+                    cout << "|" <<endl;
+                    cout << "+ "<<GREEN "Nombre editado con exito!" NC;
+                    isName = true;
+                    fileUploadFunc(list);
+                    _getch();
+                    break;
 
-            case 2:
-                cout << endl;
-                cout << "+\tEditar DNI" << endl;
-                newDNI = validateNumber("| Nuevo DNI >> ");
-                current->client.dni = newDNI;
-                cout << "|" <<endl;
-                cout << "+ "<<GREEN "DNI editado con exito!" NC;
-                isDNI = true;
-                fileUploadFunc(list);
-                _getch();
-                break;
+                case 2:
+                    cout << endl;
+                    cout << "+\tEditar DNI" << endl;
+                    newDNI = validateNumber("| Nuevo DNI >> ");
+                    current->client.dni = newDNI;
+                    cout << "|" <<endl;
+                    cout << "+ "<<GREEN "DNI editado con exito!" NC;
+                    isDNI = true;
+                    fileUploadFunc(list);
+                    _getch();
+                    break;
 
-            case 3:
-                cout << endl;
-                cout << "+\tEditar direccion" << endl;
-                current->address = isVoid("| Nueva direccion: ");
-                cout << "|" <<endl;
-                cout << "+ "<<GREEN "Direccion editada con exito!" NC;
-                isAddress = true;
-                fileUploadFunc(list);
-                _getch();
-                break;
-            case 4:
-                cout << endl;
-                cout << "+\tEditar numero" << endl;
-                newNumber = validateNumber("| Nuevo numero >> ");
-                current->number = newNumber;
-                cout << "|" <<endl;
-                cout << "+ "<<GREEN "Stock editado con exito!" NC;
-                isNumber = true;
-                fileUploadFunc(list);
-                _getch();
-                break;
+                case 3:
+                    cout << endl;
+                    cout << "+\tEditar direccion" << endl;
+                    current->address = isVoid("| Nueva direccion: ");
+                    cout << "|" <<endl;
+                    cout << "+ "<<GREEN "Direccion editada con exito!" NC;
+                    isAddress = true;
+                    fileUploadFunc(list);
+                    _getch();
+                    break;
+                case 4:
+                    cout << endl;
+                    cout << "+\tEditar numero" << endl;
+                    newNumber = validateNumber("| Nuevo numero >> ");
+                    current->number = newNumber;
+                    cout << "|" <<endl;
+                    cout << "+ "<<GREEN "Stock editado con exito!" NC;
+                    isNumber = true;
+                    fileUploadFunc(list);
+                    _getch();
+                    break;
 
-            case 0:
-                break;
-            
-            default:
-                cout << REDB "La opcion no existe" NC;
-                _getch();
-                break;
+                case 0:
+                    break;
+                
+                default:
+                    cout << REDB "La opcion no existe" NC;
+                    _getch();
+                    break;
             }
 
         } while(option != 0);
@@ -173,88 +172,71 @@ void editClient(Client *&list, long long int dni, void (*fileUploadFunc)(Client 
     }
 }
 
-void viewClient(Client *);
-void searchClient(Client* list){
-    Client* listComplete = list;
+void viewClient(Client *client){
+    cout << endl<<  left << setw(10) << "CLIENTE: " << client->client.name <<endl;
+    cout << left << setw(10) << "DNI:  " << client->client.dni<< endl;
+    cout << left << setw(10) << "DIRECCION: " << client->address << endl;
+    cout << left << setw(10) << "PRECIO: " << client->number << endl;
+}
+
+void searchClient(Client* list, string criterion, string value){
     Client* current = list;
-    int option, count;
-    string name, address;
-    long long int dni;
+    int count = 0;
+    while(current != NULL) {
+        if((criterion == "name" && current->client.name == value) ||
+           (criterion == "dni" && to_string(current->client.dni) == value) ||
+           (criterion == "address" && current->address == value)) {
+            viewClient(current);
+            count++;
+        }
+        current = current->next;
+    }
+    cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
+    _getch();
+}
+
+void searchMenu(Client* list){
+    int option;
+    string text;
     do {
         system("cls");
-        count = 0;
         cout << BLUE "\t-BUSCAR ARTICULO- " NC<< endl;
         cout << "1- Nombre" << endl;
         cout << "2- DNI" << endl;
         cout << "3- Direccion" << endl;
         cout << "0- salir" << endl;
-        cout << "Introduce la opcion >> ";
-
 
         option = validateNumber("Introduce la opcion >> ");
 
         switch (option){
-        case 1:
-            system("cls");
-            cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
-            name = isVoid("Introduce el nombre >> ");
-            while(current != NULL) {
-                if(current->client.name == name ) {
-                    viewClient(current);
-                    count++;
-                }
-                current = current->next;
-            }
-            cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-            _getch();
-            break;
+            case 1:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
+                text = isVoid("Introduce el nombre >> ");
+                searchClient(list, "name", text);
+                break;
 
-        case 2:
-            system("cls");
-            cout << BLUE "\t BUSQUEDA POR DNI" NC<< endl;
-            dni = validateNumber("Introduce el DNI >> ");
-            while(current != NULL) {
-                if(current->client.dni == dni ) {
-                    viewClient(current);
-                    count++;
-                }
-                current = current->next;
-            }
-            cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-            _getch();
-            break;
+            case 2:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR DNI" NC<< endl;
+                text = isVoid("Introduce el DNI >> ");
+                searchClient(list, "dni", text);
+                break;
 
-        case 3:
-            system("cls");
-            cout << BLUE "\t BUSQUEDA POR DIRECCION" NC<< endl;
-            address = isVoid("Introduce la direccion >> ");
-            while(current != NULL) {
-                if(current->address == address ) {
-                    viewClient(current);
-                    count++;
-                }
-                current = current->next;
-            }
-            cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-            _getch();
-            break;
-        
-        case 0:
-            break;
+            case 3:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR DIRECCION" NC<< endl;
+                text = isVoid("Introduce la direccion >> ");
+                searchClient(list, "address", text);
+                break;
+            
+            case 0:
+                break;
 
-        default:
-            cout << " " << REDB "La opcion no existe" NC;
-            _getch();
-            break;
+            default:
+                cout << " " << REDB "La opcion no existe" NC;
+                _getch();
+                break;
         }
-        current = listComplete;
     } while(option !=0);
-}
-
-
-void viewClient(Client *client){
-    cout << endl << "CLIENTE: " << client->client.name <<endl;
-    cout << "DNI:  " << client->client.dni<< endl;
-    cout << "ADDRESS: " << client->address << endl;
-    cout << "PRECIO: " << client->number << endl;
 }

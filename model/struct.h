@@ -1,6 +1,4 @@
-// #include<string>
 using namespace std;
-
 
 struct Person{
     long long int dni;
@@ -22,7 +20,6 @@ struct Client {
     long long int number;
     Client *next;
 };
-
 
 struct AdmissionDay {
     int day;

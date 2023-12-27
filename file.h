@@ -1,6 +1,3 @@
-// #include <iostream>
-// #include<string>
-// #include<conio.h>
 #include <fstream>
 #include <iomanip>
 #include <sstream>
@@ -9,8 +6,6 @@ using namespace std;
 const string DBArticles = "db/Articles.txt" ;
 const string DBClients = "db/Clients.txt" ;
 const string DBSellers = "db/Sellers.txt" ;
-
-
 
 void fileUploadArticle(Article *&);
 
@@ -49,7 +44,7 @@ void readFileArticle(Article *&list, long int &currentKey, string db, bool uploa
     file.open(db.c_str(), ios:: in);
 
     if (file.fail()){
-        cout << "No se puede abrir el archivo";
+        cout << REDB "No se puede abrir el archivo" NC;
         _getch();
         return;
     }
@@ -109,7 +104,8 @@ void fileUploadCLient(Client *&list){
     file.open(DBClients.c_str(), ios::out);  // Abre el archivo en modo de escritura, esto borrará el contenido existente y carga toda la lista de nuevo
 
     if (file.fail()){
-        cout << "No se puede abrir el archivo";
+        cout << REDB "No se puede abrir el archivo" NC;
+        _getch();
         return;
     }
     Client* current = list;
@@ -174,7 +170,7 @@ void fileUploadSeller(Seller *&list){
         return;
     }
     Seller* current = list;
-    file << "CLIENTES" << endl;
+    file << "VENDEDORES" << endl;
     while(current != NULL){
         file << current->seller.dni << "-";
         file << current->seller.name << "-";
@@ -204,7 +200,7 @@ void readFileSeller(Seller *&list, long int &countSeller){
 
     while(!file.eof()){
         getline(file, text);
-        if(text != "CLIENTES"){
+        if(text != "VENDEDORES"){
             stringstream ss(text);
             while(getline(ss, text, '-')) {
                 if (count == 0){

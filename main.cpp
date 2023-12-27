@@ -65,12 +65,9 @@ int main() {
         cout << "11 - Menu Gestion de Comisiones " << endl;
         cout << "12 - Menu Gestion de Vendedores " << endl;
 
-        cout << "0 - Salir " << endl;
-        cout << "V0.1.2.8 " << endl << endl;
+        cout << "0 - Salir " << endl<< endl;
 
         opt = validateNumber("Introduce la opcion >> ");
-        // cin.ignore();
-
         
         switch (opt){
             case 1:
@@ -102,8 +99,7 @@ int main() {
                     if(current != NULL){
                         editArticle(LArticles, isKey, fileUploadArticle);
                     } else{
-                        cout << " Articulo no existe!"<< endl;
-                        cout << "Presione un boton para continuar.";
+                        cout << REDB " Articulo no existe!" NC;
                         _getch();
                     }
                 } else {
@@ -113,6 +109,7 @@ int main() {
                 break;
 
             case 3:
+                // Remove article 
                 fflush(stdin);
                 system("cls");
                 cout << BLUE "\t-ELIMINAR ARTICULO- " NC<< endl;
@@ -122,24 +119,26 @@ int main() {
                     removeArticles(LArticles, isKey);
                     fileUploadArticle(LArticles);
                 } else {
-                    cout << "No existen articulos. Presione un boton para continuar";
+                    cout << REDB "Lista vacia." NC;
                     _getch();
                 }
                 break; 
 
             case 4:
-
+                // search article
                 system("cls");
 
                 if (LArticles != NULL){
-                    searchArticle(LArticles);
+                    searchMenu(LArticles);
 
                 } else {
-                    cout << "No existen articulos. Presione un boton para continuar";
+                    cout << REDB "Lista vacia." NC;
                     _getch();
                 }
                 break;
             case 5:
+
+                // Add stock
                 system("cls");
                 cout << BLUE "\t-INGRESO DE STOCK- " NC<< endl; 
                 nameDB = isVoid("Introduce el nombre del archivo >> ");
@@ -147,6 +146,7 @@ int main() {
                 break;
 
             case 6:
+                //Show articles
                 showArticles(LArticles);
                 break;
 
@@ -156,6 +156,7 @@ int main() {
                 break;
 
             case 12:
+                // MENU SELLER
                 menuSeller();
                 break;
             case 0:
@@ -223,7 +224,7 @@ void menuClient(){
                 system("cls");
                 if (LClient != NULL) {
 
-                    searchClient(LClient);
+                    searchMenu(LClient);
 
                 } else {
                     cout << REDB "Lista vacia." NC;
@@ -274,68 +275,66 @@ void menuSeller(){
         opt = validateNumber("Introduce la opcion >> ");
 
         switch (opt) {
-        case 1:
-            // ADD CLIENT 
-            system("cls");
-            fflush(stdin);
-            cout << BLUE "\t-AGREGAR NUEVO VENDEDOR-" NC << endl;
+            case 1:
+                // ADD SELLER
+                system("cls");
+                fflush(stdin);
+                cout << BLUE "\t-AGREGAR NUEVO VENDEDOR-" NC << endl;
 
-            dni = validateNumber("DNI del vendedor >> ");
-            cin.ignore();
+                dni = validateNumber("DNI del vendedor >> ");
 
-            fflush(stdin);
-            cout << "Nombre del vendedor: ";
-            getline(cin, name);
+                fflush(stdin);
+                cout << "Nombre del vendedor >> ";
+                getline(cin, name);
 
-            fflush(stdin);
-            cout << "-Fecha de admision: "<<endl;
-            day = validateNumber("Dia >> ");
-            month = validateNumber("Mes >> ");
-            year = validateNumber("Año >> ");
+                fflush(stdin);
+                cout << "-Fecha de admision: "<<endl;
+                day = validateNumber("Dia >> ");
+                month = validateNumber("Mes >> ");
+                year = validateNumber("Año >> ");
 
-            cout << endl;
+                cout << endl;
 
-            comission = validateNumber("Comision del vendedor >> ");
+                comission = validateNumber("Comision del vendedor >> ");
 
-            cin.ignore();
-            addNode(LSeller, createSeller(dni, name,  day, month, year,comission),false, fileUploadSeller);
-            _getch();
+                addNode(LSeller, createSeller(dni, name,  day, month, year,comission),false, fileUploadSeller);
+                _getch();
 
-            break;
-        
-        case 2:
-            system("cls");
-            fflush(stdin);
-            cout << BLUE "\t-EDITAR VENDEDOR-" NC << endl;
+                break;
+            
+            case 2:
+                system("cls");
+                fflush(stdin);
+                cout << BLUE "\t-EDITAR VENDEDOR-" NC << endl;
 
-            dni = validateNumber("DNI del vendedor >> ");
-            cin.ignore();
-            editSeller(LSeller, dni, fileUploadSeller);
-            break;
+                dni = validateNumber("DNI del vendedor >> ");
+                editSeller(LSeller, dni, fileUploadSeller);
+                break;
 
-        case 3:
-            searchSeller(LSeller);
-            break;
+            case 3:
+                searchMenu(LSeller);
+                break;
 
 
-        case 4:
-            system("cls");
-            cout <<BLUE "\t-ELIMINAR VENDEDOR-" NC<< endl;
-            fflush(stdin);
-            dni = validateNumber("DNI del vendedor >> ");
-            removeSeller(LSeller, dni);
-            fileUploadSeller(LSeller);
-            break;
-        case 5:
-            showSellers(LSeller);
-            break;
+            case 4:
+                system("cls");
+                cout <<BLUE "\t-ELIMINAR VENDEDOR-" NC<< endl;
+                fflush(stdin);
+                dni = validateNumber("DNI del vendedor >> ");
+                removeSeller(LSeller, dni);
+                fileUploadSeller(LSeller);
+                break;
+            case 5:
+                showSellers(LSeller);
+                break;
+            case 0:
+                break;  
 
-
-        default:
-            cout << " " << REDB "Opcion no valida" NC;
-            _getch();
-            break;
-        }
+            default:
+                cout << " " << REDB "Opcion no valida" NC;
+                _getch();
+                break;
+            }
 
 
     } while (opt != 0);

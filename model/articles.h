@@ -53,7 +53,7 @@ void editArticle(Article *&list, int long key, void (*fileUploadFunc)(Article *&
             case 1:
                 cout << endl;
                 cout << "+\tEditar nombre" << endl;
-                current->name = isVoid("| Nuevo nombre: ");
+                current->name = isVoid("| Nuevo nombre >> ");
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "Nombre editado con exito!" NC;
                 isName = true;
@@ -127,100 +127,14 @@ void showArticles(Article *&list) {
             current = current->next;
         } 
     } else {
-        cout << REDB "La lista de articulos esta vacia" NC;
+        cout << REDB "Lista vacia." NC;
     }
+    
     cout << endl;
     cout << "Presione cualquier tecla para continuar";
     _getch();
 }
 
-// SEARCH ARTICLE -----------------
-void viewArticle(Article *);
-void searchArticle(Article *list){
-    string name;
-    float price;
-    int option, count;
-    long int stock;
-    Article* listComplete = list;
-    Article* current = list;
-    
-    do{
-        system("cls");
-        count = 0;
-        cout << BLUE "\t-BUSCAR ARTICULO- " NC<< endl;
-        cout << "1- Nombre" << endl;
-        cout << "2- Precio" << endl;
-        cout << "3- Stock" << endl;
-        cout << "0- salir" << endl;
-
-
-        option = validateNumber("Introduce la opcion >> ");
-        cin.ignore();
-
-        switch (option){
-            case 1:
-                system("cls");
-                cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
-                name = isVoid("Introduce el nombre >> ");
-                while(current != NULL) {
-                    if(current->name == name ) {
-                        viewArticle(current);
-                        count++;
-                    }
-                    current = current->next;
-                }
-                cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-                _getch();
-                break;
-            case 2:
-                system("cls");
-                cout << BLUE "\t BUSQUEDA POR PRECIO" NC<< endl;
-                price = validateNumber("Introduce el precio >> ");
-                while(current != NULL) {
-                    if(current->price == price ) {
-                        viewArticle(current);
-                        count++;
-                    }
-                    current = current->next;
-                }
-                cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-                _getch();
-                break;
-
-            case 3:
-                system("cls");
-                cout << BLUE "\t BUSQUEDA POR STOCK" NC<< endl;
-                stock = validateNumber("Introduce el stock >> ");
-                while(current != NULL) {
-                    if(current->stock == stock ) {
-                        viewArticle(current);
-                        count++;
-                    }
-                    current = current->next;
-                }
-                cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-                _getch();
-                break;
-
-            case 0:
-                break;
-
-            default:
-                cout << " " << REDB "La opcion no existe" NC;
-                _getch();
-                break;
-        } 
-        current = listComplete;
-
-    } while(option != 0);
-}
-void viewArticle(Article *article){
-    cout << endl << "ARTICULO: " << article->name <<endl;
-    cout << "CLAVE:  " << article->key << endl;
-    cout << "CODIGO: " << article->code << endl;
-    cout << "PRECIO: " << article->price << endl;
-    cout << "STOCK:  " << article->stock << endl;
-}
 
 
 // REMOVE ARTICLE ------------------------------
@@ -245,3 +159,71 @@ void removeArticles(Article *&list, int long key){
     }
 
 }
+
+// SEARCH ARTICLE -----------------
+void viewArticle(Article *article){
+    cout << endl << left << setw(10) << "ARTICULO: " << article->name <<endl;
+    cout << left << setw(10) <<  "CLAVE:  " << article->key << endl;
+    cout << left << setw(10) <<  "CODIGO: " << article->code << endl;
+    cout << left << setw(10) <<  "PRECIO: " << article->price << endl;
+    cout << left << setw(10) <<  "STOCK:  " << article->stock << endl;
+}
+void searchArticle(Article *list, string criterion, string value){
+    Article* current = list;
+    int count = 0;
+    while(current != NULL) {
+        if((criterion == "name" && current->name == value) ||
+           (criterion == "price" && current->price == stof(value)) ||
+           (criterion == "stock" && to_string(current->stock) == value)) {
+            viewArticle(current);
+            count++;
+        }
+        current = current->next;
+    }
+    cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
+    _getch();
+}
+
+
+void searchMenu(Article* list){
+    int option;
+    string text;
+    do {
+        system("cls");
+        cout << BLUE "\t-BUSCAR ARTICULO- " NC<< endl;
+        cout << "1- Nombre" << endl;
+        cout << "2- Precio" << endl;
+        cout << "3- Stock" << endl;
+        cout << "0- salir" << endl;
+
+        option = validateNumber("Introduce la opcion >> ");
+
+        switch (option){
+            case 1:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
+                text = isVoid("Introduce el nombre >> ");
+                searchArticle(list, "name", text);
+                break;
+            case 2:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR PRECIO" NC<< endl;
+                text = isVoid("Introduce el precio >> ");
+                searchArticle(list, "price", text);
+                break;
+            case 3:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR STOCK" NC<< endl;
+                text = isVoid("Introduce el stock >> ");
+                searchArticle(list, "stock", text);
+                break;
+            case 0:
+                break;
+            default:
+                cout << " " << REDB "La opcion no existe" NC;
+                _getch();
+                break;
+        } 
+    } while(option != 0);
+}
+

@@ -37,7 +37,7 @@ void showSellers(Seller *list) {
     cout << left << setw(15) << "DNI" << setw(30) << "NOMBRE" << setw(30) << "ADMISION" << setw(12) << "COMISION" << endl;
     cout << NC;
     while(current != NULL){
-        cout << left << setw(15) << current->seller.dni << setw(30) << current->seller.name  << current->admissionDay.day<<"/" << current->admissionDay.month<<"/"<< setw(28) << current->admissionDay.year << setw(12) << current->commission << endl;
+        cout << left << setw(15) << current->seller.dni << setw(30) << current->seller.name  << current->admissionDay.day<<"/" << current->admissionDay.month<<"/"<< setw(27) << current->admissionDay.year << setw(5) << current->commission << "%" << endl;
         current = current->next;
     }
     cout << endl;
@@ -154,92 +154,74 @@ void editSeller(Seller *&list, long long int dni, void (*fileUploadFunc)(Seller 
     }
 }
 
-void viewSeller(Seller *);
-void searchSeller(Seller* list){
-    Seller* listComplete = list;
+
+void viewSeller(Seller *seller){
+    cout << endl << left << setw(20) << "CLIENTE: " << seller->seller.name <<endl;
+    cout << left << setw(20) << "DNI:  " << seller->seller.dni<< endl;
+    cout << left << setw(20) << "FECHA DE ADMISION: " <<to_string(seller->admissionDay.day)  + "/" + to_string(seller->admissionDay.month) + "/" + to_string(seller->admissionDay.year)  << endl;
+    cout << left << setw(20) << "COMISION: " << seller->commission << endl;
+}
+
+void searchSeller(Seller *list, string criterion, string value){
     Seller* current = list;
-    int option, count, day, month, year;
-    string name;
-    long long int dni;
+    int count = 0;
+    while(current != NULL) {
+        if((criterion == "name" && current->seller.name == value) ||
+           (criterion == "dni" && to_string(current->seller.dni) == value) ||
+           (criterion == "admissionDay" && current->admissionDay.day == stoi(value.substr(0, 2)) && 
+                                         current->admissionDay.month == stoi(value.substr(3, 2)) && 
+                                         current->admissionDay.year == stoi(value.substr(6, 4)))) {
+            viewSeller(current);
+            count++;
+        }
+        current = current->next;
+    }
+    cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
+    _getch();
+}
+
+
+void searchMenu(Seller* list){
+    int option;
+    string text;
     do {
         system("cls");
-        count = 0;
         cout << BLUE "\t-BUSCAR VENDEDOR-" NC<< endl;
         cout << "1- Nombre" << endl;
         cout << "2- DNI" << endl;
-        cout << "3- Fecha admision" << endl;
+        cout << "3- Fecha de admision" << endl;
         cout << "0- salir" << endl;
-        cout << "Introduce la opcion >> ";
 
         option = validateNumber("Introduce la opcion >> ");
 
         switch (option){
-        case 1:
-            system("cls");
-            cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
-            name = isVoid("Introduce el nombre >> ");
-            while(current != NULL) {
-                if(current->seller.name == name ) {
-                    viewSeller(current);
-                    count++;
-                }
-                current = current->next;
-            }
-            cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-            _getch();
-            break;
-
-        case 2:
-            system("cls");
-            cout << BLUE "\t BUSQUEDA POR DNI" NC<< endl;
-            dni = validateNumber("Introduce el DNI >> ");
-            while(current != NULL) {
-                if(current->seller.dni == dni ) {
-                    viewSeller(current);
-                    count++;
-                }
-                current = current->next;
-            }
-            cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-            _getch();
-            break;
-
-        case 3:
-            system("cls");
-            cout << BLUE "\t BUSQUEDA POR FECHA DE ADMISION" NC<< endl;
-            day = validateNumber("Introduce el dia >> ");
-            month = validateNumber("Introduce le mes >> ");
-            year = validateNumber("Introduce el anio >> ");
-            while(current != NULL) {
-                if((current->admissionDay.day == day) && (current->admissionDay.month == month) && (current->admissionDay.year == year) ) {
-                    viewSeller(current);
-                    count++;
-                }
-                current = current->next;
-            }
-            cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-            _getch();
-            break;  
-        case 0:
-            break;
-
-        default:
-            cout << " " << REDB "La opcion no existe" NC;
-            _getch();
-            break;
-        }
-        current = listComplete;
-    } while (option != 0);
+            case 1:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
+                text = isVoid("Introduce el nombre >> ");
+                searchSeller(list, "name", text);
+                break;
+            case 2:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR DNI" NC<< endl;
+                text = isVoid("Introduce el DNI >> ");
+                searchSeller(list, "dni", text);
+                break;
+            case 3:
+                system("cls");
+                cout << BLUE "\t BUSQUEDA POR FECHA DE ADMISION" NC<< endl;
+                text = isVoid("Introduce la fecha de admision (dd/mm/aaaa) >> ");
+                searchSeller(list, "admissionDay", text);
+                break;
+            case 0:
+                break;
+            default:
+                cout << " " << REDB "La opcion no existe" NC;
+                _getch();
+                break;
+        } 
+    } while(option != 0);
 }
-
-void viewSeller(Seller *seller){
-    cout << endl << "CLIENTE: " << seller->seller.name <<endl;
-    cout << "DNI:  " << seller->seller.dni<< endl;
-    cout << "FECHA DE ADMISION: " <<to_string(seller->admissionDay.day)  + "/" + to_string(seller->admissionDay.month) + "/" + to_string(seller->admissionDay.year)  << endl;
-    cout << "COMISION: " << seller->commission << endl;
-}
-
-
 
 void removeSeller(Seller *&list, long long int dni){
     string option;
