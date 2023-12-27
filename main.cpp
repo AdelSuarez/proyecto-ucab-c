@@ -79,7 +79,7 @@ int main() {
                 name = isVoid("Introduce el nombre >> ");
                 price = validateNumber("Introduce el precio >> ");
                 stock = validateNumber("Introduce el stock >> ");
-                keyArticles++;
+                keyArticles++;  
 
                 addNode(LArticles, createArticle( keyArticles, code, name, price, stock), false,fileUploadArticle);
                 _getch();
