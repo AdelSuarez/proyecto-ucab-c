@@ -13,7 +13,6 @@
 #include "settings/style.h"
 using namespace std;
 
-
 // List------------------
 Client *LClient = NULL;
 Article *LArticles = NULL;
@@ -189,13 +188,20 @@ void menuClient(){
         
         switch (opt){
             case 1:
-
+                bool rDNI;
                 // ADD CLIENT 
                 system("cls");
                 fflush(stdin);
                 cout << BLUE "\t-AGREGAR NUEVO CLIENTE-" NC << endl;
-
-                dni = validateNumber("DNI del cliente >> ");
+                while(true) {
+                    dni = validateNumber("DNI del cliente >> ");
+                    rDNI = isDuplicate(LClient, dni);
+                    if (rDNI){
+                        cout << " " << REDB "Ya existe el DNI" NC << endl;
+                    } else {
+                        break;
+                    }
+                }
                 fflush(stdin);
                 name = isVoid("Nombre del cliente >> ");
                 fflush(stdin);
@@ -277,11 +283,20 @@ void menuSeller(){
         switch (opt) {
             case 1:
                 // ADD SELLER
+                bool rDNI;
                 system("cls");
                 fflush(stdin);
                 cout << BLUE "\t-AGREGAR NUEVO VENDEDOR-" NC << endl;
+                while(true){
+                    dni = validateNumber("DNI del vendedor >> ");
+                    rDNI = isDuplicate(LSeller, dni);
+                    if(rDNI){
+                        cout << " " << REDB "Ya existe el DNI" NC << endl;
+                    } else {
+                        break;
+                    }
 
-                dni = validateNumber("DNI del vendedor >> ");
+                }
 
                 fflush(stdin);
                 cout << "Nombre del vendedor >> ";
@@ -289,11 +304,20 @@ void menuSeller(){
 
                 fflush(stdin);
                 cout << "-Fecha de admision: "<<endl;
-                day = validateNumber("Dia >> ");
-                month = validateNumber("Mes >> ");
-                year = validateNumber("Año >> ");
+                do {
+                    day = validateNumber("Dia >> ");
+                    validateDate(day, limiteDay);
+                } while (day > limiteDay || day == 0);
+                do {
+                    month = validateNumber("Mes >> ");
+                    validateDate(month, limiteMonth);
+                } while( month > limiteMonth || month == 0);
+               do {
+                    year = validateNumber("Año >> ");
+                    validateYear(year, limiteYear);
+               } while (year < limiteYear || year == 0);
 
-                cout << endl;
+
 
                 comission = validateNumber("Comision del vendedor >> ");
 

@@ -39,4 +39,29 @@ void removeNode(N *&list, N *current, N *previous) {
     _getch();
 }
 
+template <typename N>
+bool isDuplicate(N *&list, long long int dni) {
+    N * current = list;
+    while ( current != NULL) {
+        if (current->person.dni == dni){
+            return true;
+        }
+        current = current->next;
+    }
+    return false;
+}
+
+template <typename N>
+N* find(N *&list, long long int dni, N *&previous) {
+    N *current = list;
+    previous = NULL;
+
+    while (current != NULL && current->person.dni != dni) {
+        previous = current;
+        current = current->next;
+    }
+
+    return current;
+}
+
 

@@ -1,23 +1,11 @@
 using namespace std;
-
-
-Seller* findSeller(Seller *&list, long long int dni, Seller *&previous) {
-    Seller *current = list;
-    previous = NULL;
-
-    while (current != NULL && current->seller.dni != dni) {
-        previous = current;
-        current = current->next;
-    }
-
-    return current;
-}
+#include <iostream>
 
 
 Seller* createSeller(long long int dni, string name, int day, int month, int year, int comission){
     Seller *seller = new Seller();
-    seller->seller.dni = dni;
-    seller->seller.name = name;
+    seller->person.dni = dni;
+    seller->person.name = name;
     seller->admissionDay.day = day;
     seller->admissionDay.month = month;
     seller->admissionDay.year = year;
@@ -28,7 +16,6 @@ Seller* createSeller(long long int dni, string name, int day, int month, int yea
 
 void showSellers(Seller *list) {
     system("cls");
-
     Seller *current = new Seller();
     current = list;
 
@@ -37,7 +24,7 @@ void showSellers(Seller *list) {
     cout << left << setw(15) << "DNI" << setw(30) << "NOMBRE" << setw(30) << "ADMISION" << setw(12) << "COMISION" << endl;
     cout << NC;
     while(current != NULL){
-        cout << left << setw(15) << current->seller.dni << setw(30) << current->seller.name  << current->admissionDay.day<<"/" << current->admissionDay.month<<"/"<< setw(27) << current->admissionDay.year << setw(5) << current->commission << "%" << endl;
+        cout << left << setw(15) << current->person.dni << setw(29) << current->person.name << (current->admissionDay.day < 10? "0": "")  << current->admissionDay.day << "/" << (current->admissionDay.month < 10? "0": "") << current->admissionDay.month<< "/" << setw(27)<< current->admissionDay.year << setw(5) << current->commission << "%" << endl;
         current = current->next;
     }
     cout << endl;
@@ -51,8 +38,9 @@ void editSeller(Seller *&list, long long int dni, void (*fileUploadFunc)(Seller 
     int option;
     bool isName = false, isDNI = false, isComission = false, isDay = false, isMonth = false, isYear = false;
     long long int newDNI;
+    int newDay, newMonth, newYear;
     Seller *previous = NULL;
-    Seller *current = findSeller(list, dni, previous);
+    Seller *current = find(list, dni, previous);
 
     if (current != NULL){
 
@@ -60,8 +48,8 @@ void editSeller(Seller *&list, long long int dni, void (*fileUploadFunc)(Seller 
             system("cls");
             fflush(stdin);
             cout << BLUE "\t-OPCIONES-" NC<< endl;
-            cout << left << setw(1) << "1-" << setw(12) << "Nombre"<< "| " << setw(15) << current->seller.name << (isName ? GREEN "*" NC: "") << endl;
-            cout << left << setw(1) << "2-" << setw(12) << "DNI"<< "| " << setw(15) << current->seller.dni << (isDNI ? GREEN "*" NC: "") << endl;
+            cout << left << setw(1) << "1-" << setw(12) << "Nombre"<< "| " << setw(15) << current->person.name << (isName ? GREEN "*" NC: "") << endl;
+            cout << left << setw(1) << "2-" << setw(12) << "DNI"<< "| " << setw(15) << current->person.dni << (isDNI ? GREEN "*" NC: "") << endl;
             cout << "-Admision-----+ " << endl;
             cout << left << setw(1) << "3-" << setw(12) << "Dia:"<< "| " << setw(15) << current->admissionDay.day << (isDay ? GREEN "*" NC: "") << endl;
             cout << left << setw(1) << "4-" << setw(12) << "Mes:"<< "| " << setw(15) << current->admissionDay.month << (isMonth ? GREEN "*" NC: "") << endl;
@@ -77,7 +65,7 @@ void editSeller(Seller *&list, long long int dni, void (*fileUploadFunc)(Seller 
             case 1:
                 cout << endl;
                 cout << "+\tEditar nombre" << endl;
-                current->seller.name = isVoid("| Nuevo nombre: ");
+                current->person.name = isVoid("| Nuevo nombre: ");
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "Nombre editado con exito!" NC;
                 isName = true;
@@ -89,7 +77,7 @@ void editSeller(Seller *&list, long long int dni, void (*fileUploadFunc)(Seller 
                 cout << endl;
                 cout << "+\tEditar DNI" << endl;
                 newDNI = validateNumber("| Nuevo DNI >> ");
-                current->seller.dni =  newDNI;
+                current->person.dni =  newDNI;
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "DNI editado con exito!" NC;
                 isDNI = true;
@@ -100,7 +88,12 @@ void editSeller(Seller *&list, long long int dni, void (*fileUploadFunc)(Seller 
             case 3:
                 cout << endl;
                 cout << "+\tEditar dia" << endl;
-                current->admissionDay.day = validateNumber("| Nuevo dia >> ");
+                do {
+                    newDay = validateNumber("| Nuevo dia >> ");
+                    validateDate(newDay, limiteDay);
+                }while (newDay > limiteDay || newDay == 0);
+
+                current->admissionDay.day = newDay;
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "Dia editado con exito!" NC;
                 isDay = true;
@@ -111,7 +104,12 @@ void editSeller(Seller *&list, long long int dni, void (*fileUploadFunc)(Seller 
             case 4:
                 cout << endl;
                 cout << "+\tEditar mes" << endl;
-                current->admissionDay.month = validateNumber("| Nuevo mes >> ");;
+                do {
+                    newMonth = validateNumber("| Nuevo mes >> ");
+                    validateDate(newMonth, limiteMonth);
+                } while( newMonth > limiteMonth || newMonth == 0);
+
+                current->admissionDay.month = newMonth;
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "Mes editado con exito!" NC;
                 isMonth = true;
@@ -120,8 +118,13 @@ void editSeller(Seller *&list, long long int dni, void (*fileUploadFunc)(Seller 
                 break;
             case 5:
                 cout << endl;
-                cout << "+\tEditar anio" << endl;
-                current->admissionDay.year = validateNumber("| Nuevo anio >> ");;
+                cout << "+\tEditar año" << endl;
+                do {
+                    newYear = validateNumber("| Nuevo año >> ");
+                    validateYear(newYear, limiteYear);
+                } while (newYear < limiteYear || newYear == 0);
+
+                current->admissionDay.year = newYear;
                 cout << "|" <<endl;
                 cout << "+ "<<GREEN "Mes editado con exito!" NC;
                 isYear = true;
@@ -156,8 +159,8 @@ void editSeller(Seller *&list, long long int dni, void (*fileUploadFunc)(Seller 
 
 
 void viewSeller(Seller *seller){
-    cout << endl << left << setw(20) << "CLIENTE: " << seller->seller.name <<endl;
-    cout << left << setw(20) << "DNI:  " << seller->seller.dni<< endl;
+    cout << endl << left << setw(20) << "CLIENTE: " << seller->person.name <<endl;
+    cout << left << setw(20) << "DNI:  " << seller->person.dni<< endl;
     cout << left << setw(20) << "FECHA DE ADMISION: " <<to_string(seller->admissionDay.day)  + "/" + to_string(seller->admissionDay.month) + "/" + to_string(seller->admissionDay.year)  << endl;
     cout << left << setw(20) << "COMISION: " << seller->commission << endl;
 }
@@ -166,8 +169,8 @@ void searchSeller(Seller *list, string criterion, string value){
     Seller* current = list;
     int count = 0;
     while(current != NULL) {
-        if((criterion == "name" && current->seller.name == value) ||
-           (criterion == "dni" && to_string(current->seller.dni) == value) ||
+        if((criterion == "name" && current->person.name == value) ||
+           (criterion == "dni" && to_string(current->person.dni) == value) ||
            (criterion == "admissionDay" && current->admissionDay.day == stoi(value.substr(0, 2)) && 
                                          current->admissionDay.month == stoi(value.substr(3, 2)) && 
                                          current->admissionDay.year == stoi(value.substr(6, 4)))) {
@@ -226,11 +229,11 @@ void searchMenu(Seller* list){
 void removeSeller(Seller *&list, long long int dni){
     string option;
     Seller *previous = NULL;
-    Seller *current = findSeller(list, dni, previous);
+    Seller *current = find(list, dni, previous);
 
     if (current != NULL){
         fflush(stdin);
-        cout << "Vendedor: " << current->seller.name << endl;
+        cout << "Vendedor: " << current->person.name << endl;
         option = isVoid("Desea eliminar el vendedor (s/n) >> ");
         if ((option == "s") ||(option == "S")){
             removeNode(list,current, previous);

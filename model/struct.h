@@ -15,7 +15,7 @@ struct Article {
 };
 
 struct Client {
-    Person client;
+    Person person;
     string address;
     long long int number;
     Client *next;
@@ -28,7 +28,7 @@ struct AdmissionDay {
 };
 
 struct Seller {
-    Person seller;
+    Person person;
     AdmissionDay admissionDay;
     int commission;
     Seller *next;

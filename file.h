@@ -111,8 +111,8 @@ void fileUploadCLient(Client *&list){
     Client* current = list;
     file << "CLIENTES" << endl;
     while(current != NULL){
-        file << current->client.dni << "-";
-        file << current->client.name << "-";
+        file << current->person.dni << "-";
+        file << current->person.name << "-";
         file << current->address << "-";
         file << current->number << endl;
         current = current->next;
@@ -172,8 +172,8 @@ void fileUploadSeller(Seller *&list){
     Seller* current = list;
     file << "VENDEDORES" << endl;
     while(current != NULL){
-        file << current->seller.dni << "-";
-        file << current->seller.name << "-";
+        file << current->person.dni << "-";
+        file << current->person.name << "-";
         file << current->admissionDay.day << "/";
         file << current->admissionDay.month << "/";
         file << current->admissionDay.year << "-";

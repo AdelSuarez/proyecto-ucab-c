@@ -4,6 +4,9 @@
 
 using namespace std;
 
+
+const int limiteDay = 31, limiteMonth = 12, limiteYear = 2000;
+
 string isVoid(string text){
 
     string input;
@@ -30,7 +33,7 @@ double validateNumber(string text) {
         getline(cin, input);
 
         // Verifica si la entrada está vacía
-        if (input.empty()) {
+        if (input.empty()) {    
             cout << REDB "No se acepta una entrada vacia, vuelve a intentar.\n" NC;
             continue;
         }
@@ -48,4 +51,17 @@ double validateNumber(string text) {
         }
     }
     return number;
+}
+
+
+void validateDate(int date, int limiteDate) {
+    if (date > limiteDate || date == 0){
+        cout <<  REDB "Fecha incorrecta"  NC << endl;
+    }  
+}
+
+void validateYear(int year, int limiteYear) {
+    if (year < limiteYear || year == 0){
+        cout <<  REDB "Fecha incorrecta"  NC << endl;
+    }  
 }
