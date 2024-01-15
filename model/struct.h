@@ -33,3 +33,14 @@ struct Seller {
     int commission;
     Seller *next;
 };
+
+struct SalesCheck {
+    int id;
+    Seller seller;
+    Client client;
+    Article* listArticles;
+    int discount;
+    long int totalAmount;
+    long int discountedAmount;
+    SalesCheck *next;
+};

@@ -5,6 +5,7 @@
 #include "model/validation.h"
 #include "model/node.h"
 #include "model/struct.h"
+#include "model/bill.h"
 #include "model/seller.h"
 #include "model/clients.h"
 #include "model/articles.h"
@@ -17,6 +18,7 @@ using namespace std;
 Client *LClient = NULL;
 Article *LArticles = NULL;
 Seller *LSeller = NULL;
+SalesCheck *LCheck = NULL;
 
 // variables----------------
 bool loadingArticles = true;
@@ -28,6 +30,8 @@ int opt;
 
 void menuSeller();
 void menuClient();
+void buys();
+void newClient();
 
 int main() {
     readFileArticle(LArticles, keyArticles, DBArticles, false);
@@ -37,6 +41,8 @@ int main() {
     createFile("ARTICULOS",DBArticles);
     createFile("CLIENTES",DBClients);
     createFile("VENDEDORES",DBSellers);
+    createFile("FACTURA",DBSelesCheck);
+
 
     do{
         fflush(stdin);
@@ -63,6 +69,7 @@ int main() {
         cout << "10 - Menu Gestion de Bonos " << endl;
         cout << "11 - Menu Gestion de Comisiones " << endl;
         cout << "12 - Menu Gestion de Vendedores " << endl;
+        cout << "13 - compra " << endl;
 
         cout << "0 - Salir " << endl<< endl;
 
@@ -80,7 +87,8 @@ int main() {
                 stock = validateNumber("Introduce el stock >> ");
                 keyArticles++;  
 
-                addNode(LArticles, createArticle( keyArticles, code, name, price, stock), false,fileUploadArticle);
+                addNode(LArticles, createArticle( keyArticles, code, name, price, stock), false);
+                fileUploadArticle(LArticles);
                 _getch();
                 
                 break;
@@ -158,6 +166,9 @@ int main() {
                 // MENU SELLER
                 menuSeller();
                 break;
+            case 13:
+                buys();
+                break;
             case 0:
                 break;
             default:
@@ -188,29 +199,9 @@ void menuClient(){
         
         switch (opt){
             case 1:
-                bool rDNI;
                 // ADD CLIENT 
                 system("cls");
-                fflush(stdin);
-                cout << BLUE "\t-AGREGAR NUEVO CLIENTE-" NC << endl;
-                while(true) {
-                    dni = validateNumber("DNI del cliente >> ");
-                    rDNI = isDuplicate(LClient, dni);
-                    if (rDNI){
-                        cout << " " << REDB "Ya existe el DNI" NC << endl;
-                    } else {
-                        break;
-                    }
-                }
-                fflush(stdin);
-                name = isVoid("Nombre del cliente >> ");
-                fflush(stdin);
-                address = isVoid("Direccion del cliente >> ");
-                fflush(stdin);
-                number = validateNumber("Numero telefonico del cliente >> ");                
-                addClient(LClient, createClient(dni, name,  address, number),false, fileUploadCLient);
-                _getch();
-
+                newClient();
                 break;
             case 2:
                 system("cls");
@@ -251,6 +242,7 @@ void menuClient(){
             case 5:
                 showClients(LClient);
                 break;
+
             case 0:
                 break;
             default:
@@ -262,6 +254,29 @@ void menuClient(){
 
 }
 
+
+void newClient(){
+    bool rDNI;
+    fflush(stdin);
+    cout << BLUE "\t-AGREGAR NUEVO CLIENTE-" NC << endl;
+    while(true) {
+        dni = validateNumber("DNI del cliente >> ");
+        rDNI = isDuplicate(LClient, dni);
+        if (rDNI){
+            cout << " " << REDB "Ya existe el DNI" NC << endl;
+        } else {
+            break;
+        }
+    }
+    fflush(stdin);
+    name = isVoid("Nombre del cliente >> ");
+    fflush(stdin);
+    address = isVoid("Direccion del cliente >> ");
+    fflush(stdin);
+    number = validateNumber("Numero telefonico del cliente >> ");                
+    addClient(LClient, createClient(dni, name,  address, number),false, fileUploadCLient);
+    _getch();
+}
 
 
 void menuSeller(){
@@ -321,7 +336,8 @@ void menuSeller(){
 
                 comission = validateNumber("Comision del vendedor >> ");
 
-                addNode(LSeller, createSeller(dni, name,  day, month, year,comission),false, fileUploadSeller);
+                addNode(LSeller, createSeller(dni, name,  day, month, year,comission),false);
+                fileUploadSeller(LSeller);
                 _getch();
 
                 break;
@@ -362,4 +378,94 @@ void menuSeller(){
 
 
     } while (opt != 0);
+}
+
+void buys(){
+    Article *LBuys = NULL;
+    int key;
+    long double monto;
+    Seller *previousSeller = NULL;
+    Client *previousClient = NULL;
+    Article *previousArticles = NULL;
+
+    do {
+        fflush(stdin);
+        system("cls");
+        cout << BLUE "\t-COMPRA-" NC<< endl;
+
+        dni = validateNumber("DNI Vendedor >> ");
+        Seller *currentSeller = find(LSeller, dni, previousSeller);
+
+        if (currentSeller == NULL) {
+            cout << REDB "No existe el vendedor" NC;
+            _getch();
+            break;
+        }
+        cout << "VENDEDOR [ " << currentSeller->person.name << " ]" << endl<< endl;
+
+        fflush(stdin);
+        dni = validateNumber("DNI Comprador >> ");
+        Client *currentClient = find(LClient, dni, 
+        previousClient);
+
+        if (currentClient == NULL){
+            cout << REDB "\tComprador no registrado" NC << endl;
+            newClient();
+            currentClient = find(LClient, dni, previousClient);
+        }
+        while(true){
+            int countArticle;
+            long double priceCurrent = 0;
+            system("cls");
+            cout << BLUE "\t-COMPRA-" NC<< endl;
+            cout << "VENDEDOR >> " << currentSeller->person.name  << endl;
+            cout << "CLIENTE >> " << currentClient->person.name << endl;
+            cout << BLUE "\t-ARTICULOS-" NC<< endl;
+            if(LBuys != NULL){
+                Article *current = LBuys;
+                while(current != NULL){
+                cout << current->stock<< setw(7) << setw(10) << current->name << setw(7) << current->price << setw(5)<< "$" << endl;
+                if (current->stock > 1){
+                    priceCurrent += (current->stock * current->price);
+
+                } else {
+                    priceCurrent += current->price;
+
+                }
+                current = current->next;
+                } 
+            }
+            cout << "-------------------------" << endl;            
+            cout << "MONTO >> " << priceCurrent << endl;
+            cout << "> Presione 00 para monto total" << endl;
+            key = validateNumber("Codigo >> ");
+            Article *currentArticle = findArticle(LArticles, key, previousArticles);
+            if ( key != 00){
+                if ( currentArticle == NULL) {
+                    cout << REDB "EL articulos no existe" NC;
+                    _getch();
+                } else {
+
+                    countArticle = searchArticle(LBuys, "name", currentArticle->name, true);
+
+                    if (countArticle == 0){
+                        addNode(LBuys, createArticle(currentArticle->key, currentArticle->code, currentArticle->name, currentArticle->price, (countArticle == 0 ? 1 : countArticle)), true );
+                    } else {
+                        Article *currentArticle = findArticle(LBuys, key, previousArticles);
+                        currentArticle->stock = currentArticle->stock + 1;
+                    }
+                }
+            } else {
+                monto = priceCurrent;
+                break;
+            }
+        }
+        addNode(LCheck, createBill(1, currentSeller, currentClient, LBuys, 10, monto, 10), false);
+        fileUploadCheck(LCheck);
+
+
+        _getch();
+        break;
+
+    } while(opt != 0);
 }

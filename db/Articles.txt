@@ -1,33 +1,13 @@
 ARTICULOS
-B001
-Bolsas
+MOt1
+bolsa
 1.50
 10
-G001
-YARIS 2022
+YA01
+Yaris 2023
 75000.00
-1
-JK01
-Perro de oro
-1500.00
 12
-H001
-casa
-150000.00
-12
-TE01
-Laptop
-1500.00
-4
-HGY1
-Tornillo
+MTO1
+lapiz
 1.00
-150
-AB00
-audifono
-0.90
-3
-LP98
-rines
-25.06
-8
+50

@@ -168,20 +168,27 @@ void viewArticle(Article *article){
     cout << left << setw(10) <<  "PRECIO: " << article->price << endl;
     cout << left << setw(10) <<  "STOCK:  " << article->stock << endl;
 }
-void searchArticle(Article *list, string criterion, string value){
+
+int  searchArticle(Article *list, string criterion, string value, bool isCount){
     Article* current = list;
     int count = 0;
     while(current != NULL) {
         if((criterion == "name" && current->name == value) ||
            (criterion == "price" && current->price == stof(value)) ||
            (criterion == "stock" && to_string(current->stock) == value)) {
-            viewArticle(current);
+            if (!isCount){
+                viewArticle(current);
+            }
             count++;
         }
         current = current->next;
+    } 
+    if (isCount) {
+        return count;
+    } else {
+        cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
+        _getch();
     }
-    cout << endl <<(count == 0? RED : GREEN) << "Busqueda terminada " << "[" << count <<"]" NC<< endl;
-    _getch();
 }
 
 
@@ -203,19 +210,19 @@ void searchMenu(Article* list){
                 system("cls");
                 cout << BLUE "\t BUSQUEDA POR NOMBRE" NC<< endl;
                 text = isVoid("Introduce el nombre >> ");
-                searchArticle(list, "name", text);
+                searchArticle(list, "name", text, false);
                 break;
             case 2:
                 system("cls");
                 cout << BLUE "\t BUSQUEDA POR PRECIO" NC<< endl;
                 text = isVoid("Introduce el precio >> ");
-                searchArticle(list, "price", text);
+                searchArticle(list, "price", text, false);
                 break;
             case 3:
                 system("cls");
                 cout << BLUE "\t BUSQUEDA POR STOCK" NC<< endl;
                 text = isVoid("Introduce el stock >> ");
-                searchArticle(list, "stock", text);
+                searchArticle(list, "stock", text, false);
                 break;
             case 0:
                 break;

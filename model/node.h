@@ -1,7 +1,7 @@
 
 // ADD NODE ------------------------------------------------
 template <typename T>
-void addNode(T *&list, T *node, bool isFile, void (*fileUploadFunc)(T *&)){
+void addNode(T *&list, T *node, bool isFile){
 
     if (list == NULL){
         list = node;
@@ -17,7 +17,6 @@ void addNode(T *&list, T *node, bool isFile, void (*fileUploadFunc)(T *&)){
     if (!isFile){
         cout << BLACK GREENB "\tAgregado con exito" NC;
     }
-    fileUploadFunc(list);
     
 }
 
@@ -51,6 +50,8 @@ bool isDuplicate(N *&list, long long int dni) {
     return false;
 }
 
+
+// SEARCH
 template <typename N>
 N* find(N *&list, long long int dni, N *&previous) {
     N *current = list;

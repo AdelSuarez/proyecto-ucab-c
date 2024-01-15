@@ -6,6 +6,7 @@ using namespace std;
 const string DBArticles = "db/Articles.txt" ;
 const string DBClients = "db/Clients.txt" ;
 const string DBSellers = "db/Sellers.txt" ;
+const string DBSelesCheck = "db/check.txt" ;
 
 void fileUploadArticle(Article *&);
 
@@ -62,7 +63,8 @@ void readFileArticle(Article *&list, long int &currentKey, string db, bool uploa
                 stock = stoi(text);
                 count = -1;
                 currentKey++;
-                addNode(list, createArticle(currentKey, code, name, price, stock), true, fileUploadArticle);
+                addNode(list, createArticle(currentKey, code, name, price, stock), true);
+                fileUploadArticle(list);
             }
             count++;
 
@@ -98,6 +100,40 @@ void fileUploadArticle(Article *&list){
     file.close();
 }
 
+
+void fileUploadCheck(SalesCheck *&list){
+    ofstream file;
+    file.open(DBSelesCheck.c_str(), ios::out);  // Abre el archivo en modo de escritura
+
+    if (file.fail()){
+        cout << "No se puede abrir el archivo";
+        return;
+    }
+    SalesCheck* current = list;
+    file << "FACTURA" << endl;
+    while(current != NULL){
+        file << current->seller.person.dni << "-" << current->seller.person.name << "-" << current->seller.admissionDay.day << "/"<< current->seller.admissionDay.month << "/"<< current->seller.admissionDay.year << "-"<<current->seller.commission <<endl;
+        file << current->client.person.dni << "-" << current->client.person.name << "-" << current->client.address << "-" << current->client.number << endl;
+        
+        Article* currentArticle = current->listArticles;
+        while(currentArticle != NULL){
+            file << currentArticle->code << endl;
+            file << currentArticle->name << endl;
+            file << std::fixed << std::setprecision(2) << currentArticle->price << endl;
+            file << currentArticle->stock << endl;
+            currentArticle = currentArticle->next;
+        }
+        file << "--" << endl;
+        file << current->discount << endl;
+        file << current->totalAmount << endl;
+        file << current->discountedAmount << endl;
+        current = current->next;   
+    }
+
+    file.close();
+}
+
+
 // FILE UPLOAD CLIENT ----------------
 void fileUploadCLient(Client *&list){
     ofstream file;
@@ -119,6 +155,27 @@ void fileUploadCLient(Client *&list){
     }
 
     file.close();
+}
+
+void readFileCheck(SalesCheck *&list){
+    ifstream file;
+    string text;
+    list = NULL;
+
+    file.open(DBSelesCheck.c_str(), ios:: in);
+    if (file.fail()){
+        cout << "No se puede abrir el archivo";
+        return;
+    }
+
+    while (!file.eof()){
+        getline(file, text);
+        if(text != "FACTURA"){
+            // COntinuar
+        }
+
+    }
+    
 }
 
 // READ FILE CLIENT --------------------------------------
@@ -226,7 +283,8 @@ void readFileSeller(Seller *&list, long int &countSeller){
                 } else if (count == 3){
                     number = text;
                     count = -1;
-                    addNode(list, createSeller(dni, name, day, month, year, stoll(number)), true, fileUploadSeller);
+                    addNode(list, createSeller(dni, name, day, month, year, stoll(number)), true);
+                    fileUploadSeller(list);
                 }
                 count++;
             }
