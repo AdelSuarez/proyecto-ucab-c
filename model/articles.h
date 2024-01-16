@@ -1,19 +1,6 @@
 #include <functional>
 using namespace std;
 
-// FIND ARTICLE (SEARCH) ---------------------------------------------------
-Article* findArticle(Article *&list, int key, Article *&previous) {
-    Article *current = list;
-    previous = NULL;
-
-    while (current != NULL && current->key != key) {
-        previous = current;
-        current = current->next;
-    }
-
-    return current;
-}
-
 
 // CREATE ARTICLE -----------------------------------------------
 Article* createArticle(long int key, string code, string name, float price, long int stock){
@@ -34,7 +21,7 @@ void editArticle(Article *&list, int long key, void (*fileUploadFunc)(Article *&
     long int newStock;
 
     Article *previous = NULL;
-    Article *current = findArticle(list, key, previous);
+    Article *current = findKey(list, key, previous);
 
     do {
         system("cls");
@@ -141,7 +128,7 @@ void showArticles(Article *&list) {
 void removeArticles(Article *&list, int long key){
     string opt;
     Article *previous = NULL;
-    Article *current = findArticle(list, key, previous);
+    Article *current = findKey(list, key, previous);
 
     if(current != NULL){
         fflush(stdin);

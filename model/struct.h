@@ -35,7 +35,7 @@ struct Seller {
 };
 
 struct SalesCheck {
-    int id;
+    int key;
     Seller seller;
     Client client;
     Article* listArticles;

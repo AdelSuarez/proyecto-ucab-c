@@ -14,6 +14,17 @@
 #include "settings/style.h"
 using namespace std;
 
+Seller *previousSeller = NULL;
+Client *previousClient = NULL;
+Article *previousArticles = NULL;
+SalesCheck *previousCheck = NULL;
+
+// descuentos ------------
+int M = 15;
+int D1 = 10, V1 = 10;
+int D2 = 20, V2 = 20;
+int D3 = 30, V3 = 30;
+
 // List------------------
 Client *LClient = NULL;
 Article *LArticles = NULL;
@@ -23,7 +34,7 @@ SalesCheck *LCheck = NULL;
 // variables----------------
 bool loadingArticles = true;
 long long int number, dni;
-long int keyArticles, stock, isKey, counterCLient, counterSeller;
+long int keyArticles, keyCheck, stock, isKey, counterCLient, counterSeller;
 float price;
 string name, address, code , nameDB;
 int opt;
@@ -32,6 +43,13 @@ void menuSeller();
 void menuClient();
 void buys();
 void newClient();
+void menuCheck();
+void menuDiscount();
+void salesCommission();
+int findCheck(SalesCheck *&, long long int, SalesCheck *&);
+int findCheckSeller(SalesCheck *&, long long int, SalesCheck *&, bool);
+
+
 
 int main() {
     readFileArticle(LArticles, keyArticles, DBArticles, false);
@@ -100,7 +118,7 @@ int main() {
                     isKey = validateNumber(" Introduce la clave >> ");
 
                     Article *previous = NULL;
-                    Article *current = findArticle(LArticles, isKey, previous);
+                    Article *current = findKey(LArticles, isKey, previous);
 
 
                     if(current != NULL){
@@ -157,9 +175,23 @@ int main() {
                 showArticles(LArticles);
                 break;
 
+            case 7:
+                //Show check
+                menuCheck();
+                break;
+
             case 8:
                 // MENU CLIENT
                 menuClient();
+                break;
+            case 9:
+                menuDiscount();
+                break;
+            case 10:
+                break;
+
+            case 11:
+                salesCommission();
                 break;
 
             case 12:
@@ -179,6 +211,27 @@ int main() {
     }while (opt != 0);
     return 0;
 }
+
+void salesCommission(){
+    system("cls");
+    cout << BLUE "\t-GESTION DE CLIENTES-" NC<< endl;
+    dni = validateNumber("DNI Vendedor >> ");
+    Seller *currentSeller = find(LSeller, dni, previousSeller);
+
+    if (currentSeller == NULL) {
+        cout << REDB "No existe el vendedor" NC;
+        _getch();
+    } else {
+        cout << "VENDEDOR >> " << currentSeller->person.name << endl;
+        cout << "COMISION >> " << currentSeller->commission << endl;
+        cout << "CANTIDAD DE VENTAS >> " << findCheckSeller(LCheck, currentSeller->person.dni, previousCheck, false) << endl;
+        cout << "MONTO A PAGAR >> " << (findCheckSeller(LCheck, currentSeller->person.dni, previousCheck, true)/100.0)*currentSeller->commission;
+        
+    }
+    _getch();
+
+}
+
 
 void menuClient(){
     int opt;
@@ -379,14 +432,120 @@ void menuSeller(){
 
     } while (opt != 0);
 }
+void menuDiscount() {
+    int opt;
+    int optPor;
+    int* V[] = {&V1, &V2, &V3};
+    int* D[] = {&D1, &D2, &D3};
+
+    do {
+        system("cls");
+        cout << BLUE "\t-GESTION DE DESCUENTOS-" NC<< endl;
+        for(int i = 0; i < 3; i++) {
+            cout << i+1 << " - "<< *V[i] <<" Ventas -> "<< *D[i] <<"% " << endl;
+        }
+        cout << "4 - Monto > 1000 $ -> "<< M <<"% " << endl;
+        cout << "0 - Salir " << endl << endl;
+
+        opt = validateNumber("Introduce la opcion >> ");
+
+        if(opt >= 1 && opt <= 3) {
+            do {
+                cout << "1 - Numero de ventas "<< endl;
+                cout << "2 - % " << endl;
+                cout << "0 - Salir " << endl << endl;
+                optPor = validateNumber("Introduce la opcion >> ");
+                switch (optPor){
+                    case 1:
+                        *V[opt-1] = validateNumber("Nuevo numero de ventas >> ");
+                        break;
+                    case 2:
+                        *D[opt-1] = validateNumber("Nuevo % por ventas >>  ");
+                        break;
+                    case 0:
+                        break;
+                    default:
+                        cout << " " << REDB "Opcion no valida" NC;
+                        _getch();
+                        break;
+                }
+            } while (optPor != 0);
+        } else if(opt == 4) {
+            M = validateNumber("Nuevo % por el monto >> ");
+        } else if(opt != 0) {
+            cout << " " << REDB "Opcion no valida" NC;
+            _getch();
+        }
+    } while (opt != 0);
+}
+
+
+
+void menuCheck(){
+    int opt;
+    do {
+        fflush(stdin);
+
+        system("cls");
+        cout << BLUE "\t-GESTION DE FACTURAS-" NC<< endl;
+        cout << "1 - Ver Facturas " << endl;
+        cout << "2 - Editar Facturas " << endl;
+        cout << "3 - Eliminar " << endl;
+        cout << "0 - Salir " << endl << endl;
+
+        opt = validateNumber("Introduce la opcion >> ");
+
+        switch (opt){
+        case 1:
+            showCheck(LCheck);
+            break;
+        case 2:
+            fflush(stdin);
+            system("cls");
+            cout << BLUE "\t-EDITAR FACTURA- " NC<< endl;
+            
+            if (LArticles != NULL) {
+                isKey = validateNumber(" Introduce la clave >> ");
+                editChek(LCheck, LSeller, LClient, isKey);
+            } else {
+                cout << REDB "Lista vacia." NC;
+                _getch();
+            }
+            break;
+
+        case 3:
+            fflush(stdin);
+            system("cls");
+            cout << BLUE "\t-ELIMINAR FACTURA- " NC<< endl;
+            
+            if (LArticles != NULL) {
+                isKey = validateNumber(" Introduce la clave >> ");
+                removeCheck(LCheck, isKey);
+            } else {
+                cout << REDB "Lista vacia." NC;
+                _getch();
+            }
+            break;
+        case 0:
+            break; 
+        
+        default:
+            cout << " " << REDB "Opcion no valida" NC;
+            _getch();
+            break;
+        }
+
+    }while (opt != 0);
+}
+
 
 void buys(){
+    int DT = 0;
+    int discount = 0; 
     Article *LBuys = NULL;
     int key;
-    long double monto;
-    Seller *previousSeller = NULL;
-    Client *previousClient = NULL;
-    Article *previousArticles = NULL;
+    long double monto, priceCurrent = 0;
+
 
     do {
         fflush(stdin);
@@ -414,8 +573,8 @@ void buys(){
             currentClient = find(LClient, dni, previousClient);
         }
         while(true){
+            priceCurrent = 0;
             int countArticle;
-            long double priceCurrent = 0;
             system("cls");
             cout << BLUE "\t-COMPRA-" NC<< endl;
             cout << "VENDEDOR >> " << currentSeller->person.name  << endl;
@@ -439,7 +598,7 @@ void buys(){
             cout << "MONTO >> " << priceCurrent << endl;
             cout << "> Presione 00 para monto total" << endl;
             key = validateNumber("Codigo >> ");
-            Article *currentArticle = findArticle(LArticles, key, previousArticles);
+            Article *currentArticle = findKey(LArticles, key, previousArticles);
             if ( key != 00){
                 if ( currentArticle == NULL) {
                     cout << REDB "EL articulos no existe" NC;
@@ -451,16 +610,40 @@ void buys(){
                     if (countArticle == 0){
                         addNode(LBuys, createArticle(currentArticle->key, currentArticle->code, currentArticle->name, currentArticle->price, (countArticle == 0 ? 1 : countArticle)), true );
                     } else {
-                        Article *currentArticle = findArticle(LBuys, key, previousArticles);
+                        Article *currentArticle = findKey(LBuys, key, previousArticles);
                         currentArticle->stock = currentArticle->stock + 1;
                     }
                 }
             } else {
+                int countClient = findCheck(LCheck, currentClient->person.dni, previousCheck);
+                int* V[] = {&V1, &V2, &V3};
+                int* D[] = {&D1, &D2, &D3};
                 monto = priceCurrent;
+
+                for(int i = 0; i < 3; i++) {
+                    if(countClient >= *V[i]) {
+                        cout << "Descuento por frecuencia " << *D[i] <<"%" << endl;
+                        monto = monto - ((*D[i]/100.0)*monto);
+                        break;
+                        DT = *D[i];
+                    }
+                }
+
+                if (monto > 1000) {
+                    cout << "Descuento por monto de compra " << M <<"%" << endl;
+                    monto = monto - ((M/100.0)*monto);
+                    cout << "Monto total            " << monto << endl;
+                    DT += M;
+                }
+
+
                 break;
+                
             }
         }
-        addNode(LCheck, createBill(1, currentSeller, currentClient, LBuys, 10, monto, 10), false);
+        keyCheck++;
+
+        addNode(LCheck, createBill(keyCheck, currentSeller, currentClient, LBuys, DT, priceCurrent, monto), false);
         fileUploadCheck(LCheck);
 
 
@@ -468,4 +651,43 @@ void buys(){
         break;
 
     } while(opt != 0);
+}
+
+
+int findCheck(SalesCheck *&list, long long int dni, SalesCheck *&previous) {
+    int  countClient = 0;
+    SalesCheck *current = list;
+    previous = NULL;
+
+    while (current != NULL) {
+        previous = current;
+        if (current->client.person.dni == dni){
+            countClient ++;
+        }
+        current = current->next;
+    }
+    return countClient;
+}
+
+int findCheckSeller(SalesCheck *&list, long long int dni, SalesCheck *&previous, bool type) {
+    int  m = 0;
+    int countCheck =0 ;
+    SalesCheck *current = list;
+    previous = NULL;
+
+    while (current != NULL) {
+        previous = current;
+        if (current->seller.person.dni == dni){
+            m = m + current->discountedAmount;
+            countCheck++;
+        }
+        current = current->next;
+    }
+    if (true){
+        return m;
+
+    } else {
+        return countCheck;
+
+    }
 }

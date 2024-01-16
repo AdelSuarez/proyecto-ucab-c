@@ -65,4 +65,17 @@ N* find(N *&list, long long int dni, N *&previous) {
     return current;
 }
 
+template <typename N>
+N* findKey(N *&list, int key, N *&previous) {
+    N *current = list;
+    previous = NULL;
+
+    while (current != NULL && current->key != key) {
+        previous = current;
+        current = current->next;
+    }
+
+    return current;
+}
+
 

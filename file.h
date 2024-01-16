@@ -157,26 +157,6 @@ void fileUploadCLient(Client *&list){
     file.close();
 }
 
-void readFileCheck(SalesCheck *&list){
-    ifstream file;
-    string text;
-    list = NULL;
-
-    file.open(DBSelesCheck.c_str(), ios:: in);
-    if (file.fail()){
-        cout << "No se puede abrir el archivo";
-        return;
-    }
-
-    while (!file.eof()){
-        getline(file, text);
-        if(text != "FACTURA"){
-            // COntinuar
-        }
-
-    }
-    
-}
 
 // READ FILE CLIENT --------------------------------------
 void readFileClient(Client *&list, long int &countClient){

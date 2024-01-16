@@ -11,3 +11,7 @@ MTO1
 lapiz
 1.00
 50
+MMMM
+Mapa
+15.00
+12
