@@ -25,6 +25,15 @@ int D1 = 10, V1 = 10;
 int D2 = 20, V2 = 20;
 int D3 = 30, V3 = 30;
 
+
+// Bonus -----------------
+int B1 = 500;
+int B2 = 100;
+int B3 = 1500;
+int CB1 = 1;
+int CB2 = 10;
+int CB3 = 15;
+
 // List------------------
 Client *LClient = NULL;
 Article *LArticles = NULL;
@@ -48,6 +57,7 @@ void menuDiscount();
 void salesCommission();
 int findCheck(SalesCheck *&, long long int, SalesCheck *&);
 int findCheckSeller(SalesCheck *&, long long int, SalesCheck *&, bool);
+void cousin();
 
 
 
@@ -188,6 +198,7 @@ int main() {
                 menuDiscount();
                 break;
             case 10:
+                cousin();
                 break;
 
             case 11:
@@ -211,6 +222,182 @@ int main() {
     }while (opt != 0);
     return 0;
 }
+
+// void cousin(){
+//     int opt;
+//     int count, newB;
+//     Seller *current = new Seller();
+//     SalesCheck *currentCheck;
+
+//     do{
+//         fflush(stdin);
+//         system("cls");
+//         cout << BLUE "\t-GESTION DE BONUS-" NC<< endl;
+//         cout << "1 - Mostrar Tabla " << endl;
+//         cout << "2 - Edtar % de bonus " << endl;
+//         cout << "0 - Salir " << endl << endl;
+
+//         opt = validateNumber("Introduce la opcion >> ");
+//         switch (opt){
+//             case 1: 
+//                 system("cls");
+//                 current = LSeller;
+//                 cout << BLUE "\t-TABLA DE BONUS-" NC << endl;
+//                 cout << BLUE "\t\t\t\t-LISTA VENDEDORES-" NC << endl;
+//                 cout << BLACK BLUEB ;
+//                 cout << left << setw(15) << "DNI" << setw(30) << "NOMBRE" << setw(12) << "COMISION %" << setw(10) <<"VENTAS"<< setw(10) << "BONUS" <<endl ;
+//                 cout << NC;
+//                 while(current != NULL){
+//                     count = 0;
+//                     currentCheck = LCheck;
+
+//                     while(currentCheck != NULL) {
+
+//                         if(currentCheck->seller.person.dni == current->person.dni){
+//                             count++;
+//                         }
+//                         currentCheck = currentCheck->next;
+//                     }
+//                     cout << left << setw(15) << current->person.dni << setw(32) << current->person.name << setw(13) << current->commission    << count << endl;
+//                     current = current->next;
+//                 }
+//                 cout << endl;
+//                 cout << "Presione cualquier tecla para continuar";
+//                 _getch();
+                
+//                 break;
+//             case 2 :
+//                 int optB;
+//                 do {
+//                     system("cls");
+//                     cout << BLUE "\tEDITAR DE BONUS-" NC << endl;
+//                     cout << "1 - Cantidad de "<< CB1 << " para bonus de  " << B1 << endl;
+//                     cout << "2 - Cantidad de "<< CB2 << " para bonus de  " << B2 << endl;
+//                     cout << "3 - Cantidad de "<< CB3 << " para bonus de  " << B3 << endl;
+//                     cout << "0 - Salir " << endl << endl;
+//                     switch (optB){
+//                         case 1:
+//                             newB = validateNumber("Nuevo bonus >> ");
+//                             B1 = newB;                            
+//                             break;
+//                         case 2:
+//                             newB = validateNumber("Nuevo bonus >> ");
+//                             B2 = newB;
+//                             break;
+//                         case 3:
+//                             newB = validateNumber("Nuevo bonus >> ");
+//                             B3 = newB;
+//                         default:
+//                             break;
+//                     }
+//                 } while (optB != 0);
+//                 break;
+//             case 0:
+//                 break;
+
+//             default:
+//                 cout << " " << REDB "Opcion no valida" NC;
+//                 _getch();
+//                 break;
+//         }
+
+//     } while(opt != 0);
+
+// }
+
+void cousin(){
+
+    int opt;
+    int count, newB, bonus;
+    Seller *current = nullptr;
+    SalesCheck *currentCheck = nullptr;
+
+    do{
+        fflush(stdin);
+        system("cls");
+        cout << BLUE "\t-GESTION DE BONUS-" NC<< endl;
+        cout << "1 - Mostrar Tabla " << endl;
+        cout << "2 - Edtar % de bonus " << endl;
+        cout << "0 - Salir " << endl << endl;
+
+        opt = validateNumber("Introduce la opcion >> ");
+        switch (opt){
+            case 1: 
+                system("cls");
+                current = LSeller;
+                cout << BLUE "\t-TABLA DE BONUS-" NC << endl;
+                cout << BLUE "\t\t\t\t-LISTA VENDEDORES-" NC << endl;
+                cout << BLACK BLUEB ;
+                cout << left << setw(15) << "DNI" << setw(30) << "NOMBRE" << setw(12) << "COMISION %" << setw(10) <<"VENTAS"<< setw(10) << "BONUS" <<endl ;
+                cout << NC;
+                while(current != NULL){
+                    bonus = 0;
+                    count = 0;
+                    currentCheck = LCheck;
+
+                    while(currentCheck != NULL) {
+
+                        if(currentCheck->seller.person.dni == current->person.dni){
+                            count++;
+                        }
+                        currentCheck = currentCheck->next;
+                    }
+                    if (count >= CB1 && count < B2) {
+                        bonus = B1;
+                    } else if (count >= CB2 && count < B3) {
+                        bonus = B2;
+                    } else if (count >= CB3) {
+                        bonus = B3;
+                    }
+                    cout << left << setw(15) << current->person.dni << setw(32) << current->person.name << setw(13) << current->commission << setw(8)   << count <<bonus <<  endl;
+                    current = current->next;
+                }
+                cout << endl;
+                cout << "Presione cualquier tecla para continuar";
+                _getch();
+                
+                break;
+            case 2 :
+                int optB;
+                do {
+                    system("cls");
+                    cout << BLUE "\tEDITAR DE BONUS-" NC << endl;
+                    cout << "1 - Cantidad de "<< CB1 << " para bonus de  " << B1 << endl;
+                    cout << "2 - Cantidad de "<< CB2 << " para bonus de  " << B2 << endl;
+                    cout << "3 - Cantidad de "<< CB3 << " para bonus de  " << B3 << endl;
+                    cout << "0 - Salir " << endl << endl;
+                    optB = validateNumber("Introduce la opcion >> ");
+                    switch (optB){
+                        case 1:
+                            newB = validateNumber("Nuevo bonus >> ");
+                            B1 = newB;                            
+                            break;
+                        case 2:
+                            newB = validateNumber("Nuevo bonus >> ");
+                            B2 = newB;
+                            break;
+                        case 3:
+                            newB = validateNumber("Nuevo bonus >> ");
+                            B3 = newB;
+                        default:
+                            break;
+                    }
+                } while (optB != 0);
+                break;
+            case 0:
+                break;
+
+            default:
+                cout << " " << REDB "Opcion no valida" NC;
+                _getch();
+                break;
+        }
+
+    } while(opt != 0);
+
+}
+
+
 
 void salesCommission(){
     system("cls");
@@ -683,7 +870,7 @@ int findCheckSeller(SalesCheck *&list, long long int dni, SalesCheck *&previous,
         }
         current = current->next;
     }
-    if (true){
+    if (type){
         return m;
 
     } else {
